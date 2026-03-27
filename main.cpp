@@ -4,38 +4,18 @@
 
 using namespace std;
 
-
 class Solution
 {
 public:
-    int findMaxForm(vector<string> &strs, int m, int n)
+    int combinationSum4(vector<int> &nums, int target)
     {
-        vector<vector<int>> arr(strs.size(), vector<int>(2, 0));
-        for (int i = 0; i < arr.size();++i){
-            for(auto num:strs[i]){
-                if(num=='0')
-                    ++arr[i][0];
-                if(num=='1')
-                    ++arr[i][1];
-            }
-        }
-        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
-        for (int i = 0; i < arr.size();++i){
-            for (int j = m; j >= arr[i][0];--j){
-                for (int k = n; k >= arr[i][1];--k){
-                    if(dp[j-arr[i][0]][k-arr[i][1]]+1>dp[j][k])
-                        ++dp[j][k];
-                }
-            }
-        }
-        return dp[m][n];
     }
 };
-
 
 int main()
 {
     Solution so;
-    vector<string> test{"10","0001","111001","1","0"};
-    cout << so.findMaxForm(test,5,3)<< endl;
+    vector<int> test{1,2,5};
+
+    cout << so.combinationSum4(test,4) << endl;
 }
