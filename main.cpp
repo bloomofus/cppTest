@@ -7,7 +7,7 @@ using namespace std;
 class Solution
 {
 public:
-    int combinationSum4(vector<int> &nums, int target)
+    bool wordBreak(string s, vector<string> &wordDict)
     {
     }
 };
@@ -15,7 +15,7 @@ public:
 int main()
 {
     Solution so;
-    vector<int> test{1,2,5};
-
-    cout << so.combinationSum4(test,4) << endl;
+    string s = "leetcode";
+    vector<string> wordDict{"leet", "code"};
+    cout << so.wordBreak(s,wordDict) << endl;
 }
