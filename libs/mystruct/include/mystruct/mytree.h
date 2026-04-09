@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 namespace mystruct{
     struct TreeNode
@@ -21,6 +22,7 @@ namespace mystruct{
         void postshow(TreeNode *root);
         void overshow(TreeNode *root);
         tree() : root(nullptr) {};
+        tree(TreeNode *rootPtr) : root(rootPtr) {};
     };
 
     class Node
@@ -38,4 +40,6 @@ namespace mystruct{
         Node(int _val, Node *_left, Node *_right, Node *_next)
             : val(_val), left(_left), right(_right), next(_next) {}
     };
+
+    TreeNode *buildTreeFromOverOrder(std::vector<int> vec);
 }
