@@ -8,14 +8,13 @@ using namespace mystruct;
 class Solution
 {
 public:
-    int maxProfit(vector<int> &prices)
+    int lengthOfLIS(vector<int> &nums)
     {
     }
 };
-
 int main()
 {
     Solution so;
-    vector<int> test{6, 5, 4, 8, 6, 8, 7, 8, 9, 4, 5};
-    cout << so.maxProfit(test) << endl;
+    vector<int> test{10, 9, 2, 5, 3, 7, 101, 18};
+    cout << so.lengthOfLIS(test) << endl;
 }
