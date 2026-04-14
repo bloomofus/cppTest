@@ -8,13 +8,15 @@ using namespace mystruct;
 class Solution
 {
 public:
-    int lengthOfLIS(vector<int> &nums)
+    int longestCommonSubsequence(string text1, string text2)
     {
     }
 };
+
 int main()
 {
     Solution so;
-    vector<int> test{10, 9, 2, 5, 3, 7, 101, 18};
-    cout << so.lengthOfLIS(test) << endl;
+    string str1 = "abcde";
+    string str2="ace";
+    cout << so.longestCommonSubsequence(str1, str2) << endl;
 }
