@@ -8,7 +8,7 @@ using namespace mystruct;
 class Solution
 {
 public:
-    int longestCommonSubsequence(string text1, string text2)
+    int minDistance(string word1, string word2)
     {
     }
 };
@@ -16,7 +16,7 @@ public:
 int main()
 {
     Solution so;
-    string str1 = "abcde";
-    string str2="ace";
-    cout << so.longestCommonSubsequence(str1, str2) << endl;
+    string str1 = "babgbag";
+    string str2 = "bag";
+    cout << so.minDistance(str1, str2) << endl;
 }

@@ -8,11 +8,11 @@ target("main")
     add_includedirs("include")
     add_deps("mystruct","utils")
 
-target("test")
-    set_kind("binary")
-    add_files("src/test.cpp")
-    add_includedirs("include")
-    add_deps("mystruct","utils")
+-- target("test")
+--     set_kind("binary")
+--     add_files("src/test.cpp")
+--     add_includedirs("include")
+--     add_deps("mystruct","utils")
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
