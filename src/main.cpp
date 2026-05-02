@@ -8,15 +8,16 @@ using namespace mystruct;
 class Solution
 {
 public:
-    int minDistance(string word1, string word2)
+    vector<int> dailyTemperatures(vector<int> &temperatures)
     {
     }
 };
-
 int main()
 {
     Solution so;
-    string str1 = "babgbag";
-    string str2 = "bag";
-    cout << so.minDistance(str1, str2) << endl;
+    string str1 = "aaaaa";
+    string str2 = "A";
+    vector<int> test{73,74,75,71,69,72,76,73};
+    cout << so.dailyTemperatures(test) << endl;
+    return 0;
 }
