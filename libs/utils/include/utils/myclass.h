@@ -17,7 +17,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec)
             os << ", ";
         }
     }
-    os << "]";
+    os << "]" << std::endl;
     return os;
 }
 
@@ -41,6 +41,6 @@ std::ostream &operator<<(std::ostream &os, const std::vector<std::vector<T>> &ma
         }
         os << "\n"; // 每行结束后换行
     }
-    os << "]";
+    os << "]"<<std::endl;
     return os;
 }

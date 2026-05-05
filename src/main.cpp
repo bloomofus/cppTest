@@ -5,19 +5,21 @@
 using namespace std;
 using namespace mystruct;
 
+#define print
+
 class Solution
 {
 public:
-    vector<int> dailyTemperatures(vector<int> &temperatures)
+    int largestRectangleArea(vector<int> &heights)
     {
+
+        return 0;
     }
 };
 int main()
 {
     Solution so;
-    string str1 = "aaaaa";
-    string str2 = "A";
-    vector<int> test{73,74,75,71,69,72,76,73};
-    cout << so.dailyTemperatures(test) << endl;
+    vector<int> test{2, 1, 5, 6, 2, 3};
+    cout << so.largestRectangleArea(test) << endl;
     return 0;
 }
