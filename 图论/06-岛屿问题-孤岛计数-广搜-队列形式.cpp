@@ -23,22 +23,6 @@ void print_mat(vector<vector<T>> &g)
 #endif
 }
 
-void print_answer(vector<vector<int>> &g)
-{
-    for (int i = 0; i < g.size(); ++i)
-    {
-        for (int j = 0; j < g[i].size(); ++j)
-        {
-            cout << g[i][j];
-            if (j != g[i].size() - 1)
-            {
-                cout << " ";
-            }
-        }
-        cout << endl;
-    }
-}
-
 template <class T>
 void print_array(vector<T> &arr)
 {
@@ -68,10 +52,9 @@ int main()
 
     int current_idx = 0;
     std::deque<vector<int>> q{};
-    std::function<bool()> diffuse_bfs;
+    std::function<void()> diffuse_bfs;
     diffuse_bfs = [&]()
     {
-        bool isSwitch2Sea = true;
         while (!q.empty())
         {
             // 由于是广搜，所以dq当成队列使用
@@ -86,11 +69,7 @@ int main()
                 // 是陆地并且没有被访问
                 flag[i][j] = current_idx;
                 closed[i][j] = 1;
-                if (i == 0 || j == 0 || i == n - 1 || j == m - 1)
-                {
-                    // 说明该节点在边上，不会被沉没
-                    isSwitch2Sea = false;
-                }
+                //我这里没有写，最好是加入队列就设置closed防止重复加入队列，优化性能
                 if (j + 1 < m && g[i][j + 1] == 1)
                     q.push_back({i, j + 1});
                 if (i + 1 < n && g[i + 1][j] == 1)
@@ -101,9 +80,8 @@ int main()
                     q.push_back({i - 1, j});
             }
         }
-        return isSwitch2Sea;
     };
-    unordered_map<int, int> map{}; // 岛屿的索引号与是否沉没的映射
+
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < m; ++j)
@@ -121,23 +99,13 @@ int main()
                 {
                     ++current_idx;
                     q.push_back(vector<int>{i, j});
-                    map[current_idx] = diffuse_bfs();
+                    diffuse_bfs();
                 }
             }
         }
     }
     print_mat(flag);
     print_mat(closed);
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < m; ++j)
-        {
-            if (g[i][j] == 1)
-            {
-                g[i][j] = (map[flag[i][j]] == true) ? 0 : 1;
-            }
-        }
-    }
-    print_answer(g);
+    cout << current_idx;
     return 0;
 }
