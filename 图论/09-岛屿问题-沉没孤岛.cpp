@@ -71,6 +71,10 @@ int main()
     std::function<bool()> diffuse_bfs;
     diffuse_bfs = [&]()
     {
+        // 这个bfs有返回值，如果没有返回值，就和前几个题一样,
+        // 那么就是一开始那个最初节点把自己的信息传递给周围的陆地节点，让其有一个一致的索引
+        // 但是有返回值就不一样了，在bfs的过程中，会修改isSwitch2Sea这个最初的变量
+        // 从而根据当前的陆地索引以及isSwitch2Sea这个变量知道该索引的陆地的共同属性
         bool isSwitch2Sea = true;
         while (!q.empty())
         {

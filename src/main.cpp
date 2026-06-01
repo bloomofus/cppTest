@@ -1,143 +1,86 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define dbg cout << "debug here" << endl;
-// #define print
+// #define debug
 
-template <class T>
-void print_mat(vector<vector<T>> &g)
-{
-#ifdef print
-    for (int i = 0; i < g.size(); ++i)
-    {
-        for (int j = 0; j < g[i].size(); ++j)
-        {
-            cout << g[i][j];
-            if (j != g[i].size() - 1)
-            {
-                cout << " ";
-            }
-        }
-        cout << endl;
-    }
+#ifdef debug
+#define dbg cout << "[DEBUG] " << __FILE__ << ":" << __LINE__ << endl;
+#else
+#define dbg ;
 #endif
+
+// -- tools
+// 辅助函数：获取整数转换为字符串后的长度
+int get_digit_width(int val)
+{
+    string s = to_string(val);
+    return s.length();
 }
 
-void print_answer(vector<vector<int>> &g)
+// 模板版本：打印一维数组（支持指定宽度）
+template <typename T>
+void print_arr(const vector<T> &arr, int width)
 {
-    for (int i = 0; i < g.size(); ++i)
+    cout << "[";
+    for (size_t i = 0; i < arr.size(); ++i)
     {
-        for (int j = 0; j < g[i].size(); ++j)
-        {
-            cout << g[i][j];
-            if (j != g[i].size() - 1)
-            {
-                cout << " ";
-            }
-        }
-        cout << endl;
+        if (i > 0)
+            cout << ", ";
+        // setw(width) 设置最小宽度，right 表示右对齐（数字通常右对齐更整齐）
+        cout << setw(width) << arr[i];
     }
+    cout << "]";
 }
 
-template <class T>
-void print_array(vector<T> &arr)
+// 模板版本：打印二维数组（矩阵）- 自动计算最大宽度并对齐
+template <typename T>
+void print_mat(const vector<vector<T>> &mat)
 {
-#ifdef print
-    for (auto ele : arr)
-        cout << ele << " ";
-    cout << endl;
-#endif
+    if (mat.empty())
+    {
+        cout << "[]" << endl;
+        return;
+    }
+
+    // 1. 遍历所有元素，找到最大数字的字符串长度
+    int max_width = 1;
+    for (const auto &row : mat)
+    {
+        for (const auto &val : row)
+        {
+            int w = get_digit_width(val);
+            if (w > max_width)
+                max_width = w;
+        }
+    }
+
+    // 为了美观，可以额外加1个空格 padding
+    max_width += 1;
+
+    cout << "[" << endl;
+    for (const auto &row : mat)
+    {
+        cout << "  "; // 行首缩进
+        print_arr(row, max_width);
+        cout << endl;
+    }
+    cout << "]" << endl;
 }
 
 int main()
 {
-    int n = 0;
-    int m = 0;
-    cin >> n >> m;
-    vector<vector<int>> g(n, vector<int>(m, 0));
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < m; ++j)
-        {
-            cin >> g[i][j];
-        }
-    }
-    vector<vector<int>> flag(n, vector<int>(m, -1));
-    vector<vector<bool>> closed(n, vector<bool>(m, 0));
-    print_mat(g);
+    // -- 思路
 
-    int current_idx = 0;
-    std::deque<vector<int>> q{};
-    std::function<bool()> diffuse_bfs;
-    diffuse_bfs = [&]()
-    {
-        bool isSwitch2Sea = true;
-        while (!q.empty())
-        {
-            // 由于是广搜，所以dq当成队列使用
-            vector<int> cur = q.front();
-            print_array(cur);
-            q.pop_front();
-            // 先看当前节点是不是陆地，如果是陆地并且没有被访问，再添加后续节点
-            int i = cur[0];
-            int j = cur[1];
-            if (g[i][j] == 1 && !closed[i][j])
-            {
-                // 是陆地并且没有被访问
-                flag[i][j] = current_idx;
-                closed[i][j] = 1;
-                if (i == 0 || j == 0 || i == n - 1 || j == m - 1)
-                {
-                    // 说明该节点在边上，不会被沉没
-                    isSwitch2Sea = false;
-                }
-                if (j + 1 < m && g[i][j + 1] == 1)
-                    q.push_back({i, j + 1});
-                if (i + 1 < n && g[i + 1][j] == 1)
-                    q.push_back({i + 1, j});
-                if (j - 1 >= 0 && g[i][j - 1] == 1)
-                    q.push_back({i, j - 1});
-                if (i - 1 >= 0 && g[i - 1][j] == 1)
-                    q.push_back({i - 1, j});
-            }
-        }
-        return isSwitch2Sea;
-    };
-    unordered_map<int, int> map{}; // 岛屿的索引号与是否沉没的映射
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < m; ++j)
-        {
-            if (g[i][j] == 1)
-            {
-                if (closed[i][j] == 1)
-                {
-                    // 一般来说，通过这个循环遍历到的陆地都是独立的岛屿
-                    // 如果它和之前的岛屿有连接，那么在之前那个岛屿递归的时候就会蔓延到当前这个岛屿
-                    // 所以不存在当前岛屿既和之前岛屿有连接，又是在这个循环里面遍历到的
-                    continue;
-                }
-                else
-                {
-                    ++current_idx;
-                    q.push_back(vector<int>{i, j});
-                    map[current_idx] = diffuse_bfs();
-                }
-            }
-        }
-    }
-    print_mat(flag);
-    print_mat(closed);
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < m; ++j)
-        {
-            if (g[i][j] == 1)
-            {
-                g[i][j] = (map[flag[i][j]] == true) ? 0 : 1;
-            }
-        }
-    }
-    print_answer(g);
+    
+
+
+    // -- 输入数据
+    
+
+    // -- 构建邻接链表
+    
+    
+    // -- 主循环
+
     return 0;
 }
