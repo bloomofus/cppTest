@@ -72,9 +72,28 @@ int main()
     // -- 思路
 
 
+
     // -- 输入数据 
-    int n;
-    cin>>n;
+    int n,m;
+    cin>>n>>m;
+    struct Edge
+    {
+        int u,v,w;
+        bool operator<(const Edge& other) const{
+            return w<other.w;
+        }
+    };
+    vector<Edge> edges(m);
+    for(int i=0;i<m;++i)
+    {
+        cin>>edges[i].u>>edges[i].v>>edges[i].w;
+    }
+    std::sort(edges.begin(),edges.end());
+
+    // -- kruskal方法
+    // 把所有边从小到大进行排序，每次挑选最短的边并且要保证不会成环
+    // 如果成环就选下一条边
+    // 判断成环的话感觉有点麻烦，需要使用并查集
     struct UnionFind
     {
         vector<int> father{};
@@ -132,20 +151,21 @@ int main()
         }
     };
     UnionFind uf(n);
-    for(int i=0;i<n;++i)
+    int sum_cost=0;
+    for(auto edge:edges)
     {
-        int a,b;
-        cin>>a>>b;
-        if(uf.inSameSet(a,b))
+        if(uf.join(edge.u,edge.v)==false)
         {
-            cout<<a<<" "<<b;
-            return 0;
+            // 说明u、v两个节点已经有联通了,不能使用该边
+            continue;
         }
-        uf.join(a,b);
+        else
+        {
+            // 说明u、v两个节点没联通，我在uv直接加条线
+            sum_cost+=edge.w;
+        }
     }
+    cout<<sum_cost;
 
-    // -- 主循环
-    cout<<"  no find ";
-   
     return 0;
 }
