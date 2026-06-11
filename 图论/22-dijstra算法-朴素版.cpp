@@ -99,9 +99,9 @@ int main()
         // 如果输出node不是0，如果输出dist是INT_MAX，说明该节点是浮空节点，和其他节点无法连接
         int min_dist = INT_MAX;
         int curNode = 0;
-        for (int i = 1; i <= n;++i)
+        for (int i = 1; i <= n; ++i)
         {
-            if(closed[i]==false&&dist[i]<min_dist)
+            if (closed[i] == false && dist[i] < min_dist)
             {
                 curNode = i;
                 min_dist = dist[i];
@@ -109,14 +109,15 @@ int main()
         }
         return {curNode, min_dist};
     };
-    int tmp = n;    // 每次循环会给一个节点加入closed数组，最多循环n次
+    int tmp = n; // 每次循环会给一个节点加入closed数组，最多循环n次
     while (1)
     {
         // 控制循环出去的方法
         // 1,int tmp = n; while(tmp--) 每次循环会给一个节点加入closed数组，最多循环n次
         // 2,auto [curNode,dist_] = findCurNode(); if (dist_ == INT_MAX) break; 找到悬空节点
-        auto [curNode,dist_] = findCurNode();
-        if(dist_==INT_MAX) break;
+        auto [curNode, dist_] = findCurNode();
+        if (dist_ == INT_MAX)
+            break;
         closed[curNode] = true;
         // if (g[curNode].size()==0) break; // 说明无法继续探索了,这个是错误的❌
         for (auto [next_node, edge_w] : g[curNode])
@@ -129,6 +130,6 @@ int main()
             }
         }
     }
-    cout <<( dist[n] == INT_MAX ? -1 : dist[n]);
+    cout << (dist[n] == INT_MAX ? -1 : dist[n]);
     return 0;
 }

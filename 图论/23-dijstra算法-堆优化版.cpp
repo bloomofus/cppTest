@@ -88,47 +88,47 @@ int main()
     // -- Dijkstra 算法
     // Dijkstra 算法的核心思想是贪心策略：
     // 每次从未确定最短路的节点中选取距离起点最近的节点，并用它来更新其邻居节点的距离，从而逐步确定所有节点的最短路径。
-    vector<int> closed(n + 1, false);
-    vector<int> dist(n + 1, INT_MAX);
-    dist[1] = 0;
-    auto findCurNode = [&closed, &dist, &n]() -> pair<int, int>
+
+    struct distClass
     {
-        // 找出当前最小dist的节点，并且该节点还要没有加入closed
-        // 如果输出node为0，那么就是没有找到，所有的节点就已经遍历结束了
-        // 如果输出node不是0，如果输出dist不是INT_MAX，说明该节点还有后续节点
-        // 如果输出node不是0，如果输出dist是INT_MAX，说明该节点是浮空节点，和其他节点无法连接
-        int min_dist = INT_MAX;
-        int curNode = 0;
-        for (int i = 1; i <= n;++i)
-        {
-            if(closed[i]==false&&dist[i]<min_dist)
-            {
-                curNode = i;
-                min_dist = dist[i];
-            }
-        }
-        return {curNode, min_dist};
+        int dist;
+        int node;
     };
-    int tmp = n;    // 每次循环会给一个节点加入closed数组，最多循环n次
-    while (1)
+    auto greater = [](const distClass &a, const distClass &b)
     {
-        // 控制循环出去的方法
-        // 1,int tmp = n; while(tmp--) 每次循环会给一个节点加入closed数组，最多循环n次
-        // 2,auto [curNode,dist_] = findCurNode(); if (dist_ == INT_MAX) break; 找到悬空节点
-        auto [curNode,dist_] = findCurNode();
-        if(dist_==INT_MAX) break;
-        closed[curNode] = true;
-        // if (g[curNode].size()==0) break; // 说明无法继续探索了,这个是错误的❌
-        for (auto [next_node, edge_w] : g[curNode])
+        // greater是从前往后逐渐变大
+        return a.dist > b.dist;
+    };
+    priority_queue<distClass, vector<distClass>, decltype(greater)> pq(greater);
+    vector<vector<int>> dist_mat(n + 1, vector<int>{INT_MAX, 0}); // 第一列是dist，第二列是前驱节点
+    dist_mat[1][0] = 0;                                           // 节点1的前驱节点假装是0
+    unordered_set<int> closed{};
+    pq.push({0, 1}); // 加入第一个节点
+    while (!pq.empty())
+    {
+        auto processNode = pq.top();
+        pq.pop();
+        // 需要判断当前处理类是否已经处理过
+        if (closed.find(processNode.node) != closed.end())
+            continue;
+
+        // 接下来对于这个processNode的出度进行遍历，并且更新dist_mat矩阵里的距离信息
+        for (auto edge : g[processNode.node])
         {
-            // 在这个循环里面，是根据已知的最短路径更新所有未访问节点的dist信息，但是并不涉及closed数组
-            if (closed[next_node] == false && dist[curNode] + edge_w < dist[next_node])
+            int next_node = edge.first;
+            int edge_w = edge.second;
+            if (closed.find(next_node) == closed.end() &&
+                dist_mat[next_node][0] > dist_mat[processNode.node][0] + edge_w)
             {
-                // 当前next_node节点没有被访问，并且从curNode到达next_node花费更少
-                dist[next_node] = dist[curNode] + edge_w;
+                // 从当前的处理节点到next_node的距离比之前记录的更近
+                dist_mat[next_node][0] = dist_mat[processNode.node][0] + edge_w;
+                dist_mat[next_node][1] = processNode.node; // 更新前驱节点
+                // 更新前驱节点之后需要把该节点加入处理队列
+                pq.push({dist_mat[next_node][0], next_node});
             }
         }
+        closed.insert(processNode.node);
     }
-    cout <<( dist[n] == INT_MAX ? -1 : dist[n]);
+    cout << (dist_mat[n][0] == INT_MAX ? -1 : dist_mat[n][0]);
     return 0;
 }
