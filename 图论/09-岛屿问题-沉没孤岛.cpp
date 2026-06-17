@@ -93,7 +93,7 @@ int main()
                 if (i == 0 || j == 0 || i == n - 1 || j == m - 1)
                 {
                     // 说明该节点在边上，不会被沉没
-                    isSwitch2Sea = false;
+                    isSwitch2Sea = false; // 其实到这就可以直接返回了
                 }
                 if (j + 1 < m && g[i][j + 1] == 1)
                     q.push_back({i, j + 1});

@@ -1,78 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// #define debug
-
-#ifdef debug
-#define dbg cout << "[DEBUG] " << __FILE__ << ":" << __LINE__ << endl;
-#else
-#define dbg ;
-#endif
-
-// -- tools
-// 辅助函数：获取整数转换为字符串后的长度
-int get_digit_width(int val)
-{
-    string s = to_string(val);
-    return s.length();
-}
-
-// 模板版本：打印一维数组（支持指定宽度）
-template <typename T>
-void print_arr(const vector<T> &arr, int width)
-{
-    cout << "[";
-    for (size_t i = 0; i < arr.size(); ++i)
-    {
-        if (i > 0)
-            cout << ", ";
-        // setw(width) 设置最小宽度，right 表示右对齐（数字通常右对齐更整齐）
-        cout << setw(width) << arr[i];
-    }
-    cout << "]";
-}
-
-// 模板版本：打印二维数组（矩阵）- 自动计算最大宽度并对齐
-template <typename T>
-void print_mat(const vector<vector<T>> &mat)
-{
-    if (mat.empty())
-    {
-        cout << "[]" << endl;
-        return;
-    }
-
-    // 1. 遍历所有元素，找到最大数字的字符串长度
-    int max_width = 1;
-    for (const auto &row : mat)
-    {
-        for (const auto &val : row)
-        {
-            int w = get_digit_width(val);
-            if (w > max_width)
-                max_width = w;
-        }
-    }
-
-    // 为了美观，可以额外加1个空格 padding
-    max_width += 1;
-
-    cout << "[" << endl;
-    for (const auto &row : mat)
-    {
-        cout << "  "; // 行首缩进
-        print_arr(row, max_width);
-        cout << endl;
-    }
-    cout << "]" << endl;
-}
-
 int main()
 {
     // -- 思路
     // 本题相当于在图结构中，找到起始节点到目标节点的最短路径，
-    // 一般使用bfs，如果使用双向bfs，听着高级，但是处理很麻烦
+    // 最短路径一般使用bfs，如果使用双向bfs，听着高级，但是处理很麻烦
     // 为什么使用邻接链表，在遍历一个节点的扇出节点的时候很方便
+    // bfs有：1，队列，直到队列为空，2，层序轮次循环控制的遍历
+    // 这里选择的是方案2，能够知道最短路径节点数
 
     // -- 输入数据
     int n = 0;
