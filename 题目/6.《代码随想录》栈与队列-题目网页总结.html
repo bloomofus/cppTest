@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+
+<html data-theme="dark" lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="dark light" name="color-scheme"/>
+<title>《代码随想录》栈与队列 · 题目网页总结</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css" id="hljs-theme" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script>
+  window.MathJax = { tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] }, svg: { fontCache: "global" } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script>
+    (() => {
+      try {
+        const saved = localStorage.getItem('tech-doc-theme');
+        if (['dark', 'light', 'eye'].includes(saved)) {
+          document.documentElement.dataset.theme = saved;
+        }
+      } catch (_) {}
+    })();
+  </script>
+<style>
+    :root {
+      --sidebar-width: 260px;
+      --sidebar-collapsed-width: 20px;
+      --content-max-width: 980px;
+      --radius: 12px;
+      --transition: 180ms ease;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei",
+        "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif;
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #282c34;
+      --bg-soft: #2c313c;
+      --text: #abb2bf;
+      --text-strong: #d7dae0;
+      --muted: #7f848e;
+      --sidebar-bg: #1e2127;
+      --sidebar-hover: #2a2f38;
+      --card-bg: #21252b;
+      --border: #3b4048;
+      --h1: #c678dd;
+      --h2: #61afef;
+      --h3: #98c379;
+      --h4: #e06c75;
+      --link: #e5c07b;
+      --link-hover: #f0d58c;
+      --accent: #61afef;
+      --active-bg: rgba(97,175,239,.16);
+      --active-text: #d7eaff;
+      --code-bg: #21252b;
+      --inline-code-bg: #343a46;
+      --quote-bg: rgba(97,175,239,.07);
+      --quote-border: #61afef;
+      --tag-bg: rgba(198,120,221,.15);
+      --tag-text: #d7a5e8;
+      --table-stripe: rgba(255,255,255,.025);
+      --shadow: 0 10px 30px rgba(0,0,0,.22);
+      --scroll-thumb: #4b5263;
+      --scroll-track: #21252b;
+      --overlay: rgba(10,12,16,.88);
+    }
+
+    html[data-theme="light"] {
+      --bg: #fff9f0;
+      --bg-soft: #fffdf8;
+      --text: #333;
+      --text-strong: #222;
+      --muted: #766f68;
+      --sidebar-bg: #f5ebe0;
+      --sidebar-hover: #eadfd3;
+      --card-bg: #fffdf8;
+      --border: #ded3c7;
+      --h1: #8f4b8f;
+      --h2: #356f9f;
+      --h3: #477a45;
+      --h4: #a04f45;
+      --link: #4177a8;
+      --link-hover: #245c8d;
+      --accent: #4177a8;
+      --active-bg: rgba(65,119,168,.12);
+      --active-text: #244f75;
+      --code-bg: #f6efe7;
+      --inline-code-bg: #eee4da;
+      --quote-bg: rgba(65,119,168,.06);
+      --quote-border: #6c93b5;
+      --tag-bg: #eee2f0;
+      --tag-text: #754379;
+      --table-stripe: rgba(76,64,52,.035);
+      --shadow: 0 10px 30px rgba(96,72,48,.10);
+      --scroll-thumb: #b8aa9c;
+      --scroll-track: #eee5db;
+      --overlay: rgba(38,33,28,.86);
+    }
+
+    html[data-theme="eye"] {
+      --bg: #f0e6d3;
+      --bg-soft: #f5eddd;
+      --text: #3e3e3e;
+      --text-strong: #2f2f2f;
+      --muted: #716b61;
+      --sidebar-bg: #e4d5bc;
+      --sidebar-hover: #d8c7aa;
+      --card-bg: #f6eedf;
+      --border: #cfc0a5;
+      --h1: #765a73;
+      --h2: #4f6f78;
+      --h3: #5f7350;
+      --h4: #8a6256;
+      --link: #56768b;
+      --link-hover: #3e5f75;
+      --accent: #657f73;
+      --active-bg: rgba(101,127,115,.14);
+      --active-text: #40574c;
+      --code-bg: #e7ddca;
+      --inline-code-bg: #ddd1bd;
+      --quote-bg: rgba(101,127,115,.08);
+      --quote-border: #7d9181;
+      --tag-bg: #ded7bf;
+      --tag-text: #5f6448;
+      --table-stripe: rgba(80,70,55,.035);
+      --shadow: 0 10px 28px rgba(82,68,45,.10);
+      --scroll-thumb: #aa9a7f;
+      --scroll-track: #dfd2bd;
+      --overlay: rgba(46,42,35,.84);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      transition: background var(--transition), color var(--transition);
+    }
+    button { font: inherit; color: inherit; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { color: var(--link-hover); text-decoration: underline; }
+
+    .app { display: flex; width: 100%; height: 100vh; }
+
+    .sidebar {
+      position: relative;
+      z-index: 20;
+      width: var(--sidebar-width);
+      min-width: var(--sidebar-width);
+      height: 100vh;
+      overflow: hidden;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      transition: width var(--transition), min-width var(--transition);
+    }
+    .sidebar-inner {
+      width: var(--sidebar-width);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: opacity 120ms ease;
+    }
+    body.sidebar-collapsed .sidebar {
+      width: var(--sidebar-collapsed-width);
+      min-width: var(--sidebar-collapsed-width);
+      cursor: e-resize;
+    }
+    body.sidebar-collapsed .sidebar .sidebar-inner {
+      opacity: 0;
+      pointer-events: none;
+    }
+    body.sidebar-collapsed .sidebar::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 4px;
+      background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+      opacity: .55;
+    }
+    body.sidebar-collapsed .sidebar:hover {
+      width: var(--sidebar-width);
+      min-width: var(--sidebar-width);
+      cursor: default;
+      box-shadow: 8px 0 26px rgba(0,0,0,.18);
+    }
+    body.sidebar-collapsed .sidebar:hover .sidebar-inner {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sidebar-header {
+      flex: 0 0 58px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px 0 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      min-width: 0;
+      flex: 1;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+    }
+    .icon-btn:hover { background: var(--sidebar-hover); border-color: var(--border); }
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+    .icon-btn .pin-icon,
+    .icon-btn .unpin-icon { display: none; }
+
+    /* 固定展开：按钮表示“取消固定 / 收起” */
+    body:not(.sidebar-collapsed) #collapseBtn .pin-icon { display: block; }
+
+    /* 收起后悬停临时展开：按钮切换为“固定目录” */
+    body.sidebar-collapsed #collapseBtn .unpin-icon { display: block; }
+    body.sidebar-collapsed .sidebar:hover #collapseBtn {
+      background: var(--active-bg);
+      color: var(--active-text);
+      border-color: var(--border);
+    }
+
+    .toc-wrap {
+      flex: 1;
+      overflow: auto;
+      padding: 12px 10px 18px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+    }
+    .toc-title {
+      margin: 4px 8px 10px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .toc, .toc ul { list-style: none; padding: 0; margin: 0; }
+    .toc ul { margin-left: 13px; border-left: 1px solid var(--border); }
+    .toc li { position: relative; }
+    .toc-row { display: flex; align-items: center; min-width: 0; }
+    .toc-toggle {
+      width: 20px;
+      height: 28px;
+      flex: 0 0 20px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: transform var(--transition);
+    }
+    .toc li.collapsed > .toc-row .toc-toggle { transform: rotate(-90deg); }
+    .toc li:not(.has-children) > .toc-row .toc-toggle { visibility: hidden; }
+    .toc li.collapsed > ul { display: none; }
+    .toc-link {
+      min-width: 0;
+      flex: 1;
+      display: block;
+      padding: 6px 8px;
+      border-radius: 7px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .toc-link:hover { background: var(--sidebar-hover); text-decoration: none; }
+    .toc-link.active {
+      background: var(--active-bg);
+      color: var(--active-text);
+      font-weight: 700;
+    }
+
+    .sidebar-footer {
+      flex: 0 0 auto;
+      padding: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .theme-switcher { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .theme-btn {
+      padding: 8px 4px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .theme-btn:hover, .theme-btn.active { background: var(--active-bg); color: var(--active-text); }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--bg);
+      scrollbar-width: thin;
+      scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+    }
+    .main::-webkit-scrollbar, .toc-wrap::-webkit-scrollbar { width: 10px; height: 10px; }
+    .main::-webkit-scrollbar-thumb, .toc-wrap::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 10px; }
+    .main::-webkit-scrollbar-track, .toc-wrap::-webkit-scrollbar-track { background: var(--scroll-track); }
+
+    .document {
+      width: min(calc(100% - 48px), var(--content-max-width));
+      margin: 0 auto;
+      padding: 46px 0 80px;
+    }
+
+    .meta-card {
+      margin-bottom: 44px;
+      padding: 28px 30px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+    }
+    .meta-card .doc-type {
+      margin-bottom: 10px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .meta-card h1 {
+      margin: 0 0 22px;
+      padding: 0;
+      border: 0;
+      text-align: center;
+      color: var(--text-strong);
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.25;
+    }
+    .abstract {
+      margin: 0 0 20px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--quote-border);
+      border-radius: 0 8px 8px 0;
+      background: var(--quote-bg);
+      line-height: 1.85;
+    }
+    .abstract strong { color: var(--text-strong); }
+    .keywords { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .keywords-label { color: var(--muted); font-size: 13px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    article { font-size: 16px; line-height: 1.85; }
+    article h1, article h2, article h3, article h4 {
+      scroll-margin-top: 24px;
+      line-height: 1.35;
+      font-weight: 800;
+    }
+    article h1 {
+      margin: 54px 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--h1);
+      font-size: 2rem;
+    }
+    article h2 {
+      margin: 42px 0 18px;
+      color: var(--h2);
+      font-size: 1.55rem;
+    }
+    article h3 {
+      margin: 32px 0 14px;
+      color: var(--h3);
+      font-size: 1.22rem;
+    }
+    article h4 { margin: 26px 0 12px; color: var(--h4); font-size: 1.05rem; }
+    article p { margin: 0 0 18px; }
+    article strong { color: var(--text-strong); }
+    article em { color: var(--text-strong); }
+    article del { color: var(--muted); }
+    article ul, article ol { margin: 0 0 18px; padding-left: 1.7em; }
+    article li { margin: 6px 0; }
+    article li::marker { color: var(--accent); }
+    article hr { margin: 34px 0; border: 0; border-top: 1px solid var(--border); }
+
+    blockquote {
+      margin: 20px 0;
+      padding: 14px 18px;
+      border-left: 4px solid var(--quote-border);
+      border-radius: 0 8px 8px 0;
+      background: var(--quote-bg);
+      color: var(--text);
+    }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: .92em;
+    }
+    :not(pre) > code {
+      padding: 2px 6px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--inline-code-bg);
+      color: var(--text-strong);
+    }
+    .code-block {
+      position: relative;
+      margin: 20px 0 24px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--code-bg);
+    }
+    .code-label {
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      font: 12px var(--font-mono);
+    }
+    .code-block pre { margin: 0; padding: 16px; overflow: auto; background: transparent; }
+    .code-block pre code { background: transparent !important; }
+
+    .table-wrap { margin: 20px 0 24px; overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { padding: 11px 14px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--bg-soft); color: var(--text-strong); font-weight: 800; }
+    tbody tr:nth-child(even) { background: var(--table-stripe); }
+
+    .task-list { list-style: none; padding-left: 0; }
+    .task-list input { margin-right: 8px; accent-color: var(--accent); }
+
+    .figure {
+      margin: 26px 0;
+      text-align: center;
+    }
+    .figure img {
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      cursor: zoom-in;
+    }
+    .figcaption { margin-top: 9px; color: var(--muted); font-size: 13px; }
+
+    .note {
+      margin: 20px 0;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      background: var(--bg-soft);
+    }
+    .note-title { margin-bottom: 4px; color: var(--text-strong); font-weight: 800; }
+
+    .footnotes {
+      margin-top: 44px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .image-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      background: var(--overlay);
+    }
+    .image-modal.open { display: flex; }
+    .image-modal img { max-width: 95vw; max-height: 90vh; border-radius: 8px; box-shadow: 0 18px 60px rgba(0,0,0,.45); }
+    .image-modal button {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 50%;
+      background: rgba(0,0,0,.28);
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 820px) {
+      :root { --sidebar-width: 235px; }
+      .document { width: min(calc(100% - 28px), var(--content-max-width)); padding-top: 28px; }
+      .meta-card { padding: 22px 20px; }
+    }
+
+    @media print {
+      body { overflow: visible; }
+      .sidebar { display: none; }
+      .main { overflow: visible; height: auto; }
+      .document { width: 100%; max-width: none; padding: 0; }
+      .meta-card { box-shadow: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+      /* ===== 目录优化 ===== */
+    .toc-search { flex: 0 0 auto; padding: 10px 12px 4px; }
+    .toc-search input {
+      width: 100%; padding: 7px 10px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--bg-soft); color: var(--text);
+      font: 13px var(--font-sans); outline: none;
+    }
+    .toc-search input:focus { border-color: var(--accent); }
+    .toc-search input::placeholder { color: var(--muted); }
+    .toc-group-count { color: var(--muted); font-weight: 400; font-size: 11px; margin-left: 5px; }
+
+    /* 阅读进度条（随 main 滚动容器 sticky） */
+    .read-progress {
+      position: sticky; top: 0; height: 3px; z-index: 30;
+      background: transparent; pointer-events: none;
+    }
+    .read-progress .bar {
+      display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--h1));
+    }
+
+    /* 返回顶部按钮 */
+    .back-top {
+      position: fixed; right: 26px; bottom: 30px; z-index: 50;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--card-bg);
+      color: var(--text); box-shadow: var(--shadow);
+      cursor: pointer; font-size: 18px; line-height: 1;
+      display: grid; place-items: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .back-top.show { opacity: 1; pointer-events: auto; }
+    .back-top:hover { transform: translateY(-2px); }
+
+    @media print { .toc-search, .read-progress, .back-top { display: none !important; } }
+  </style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-inner">
+<div class="sidebar-header">
+<div class="brand" title="栈与队列专题目录">栈与队列专题目录</div>
+<button aria-label="取消固定并收起目录" aria-pressed="true" class="icon-btn" id="collapseBtn" title="取消固定并收起目录" type="button">
+<svg aria-hidden="true" class="unpin-icon" viewbox="0 0 24 24">
+<path d="M12 17v5"></path>
+<path d="M5 17h14"></path>
+<path d="M7 17l1.5-7V5h7v5L17 17"></path>
+<path d="M9 5V2h6v3"></path>
+<path d="M4 4l16 16"></path>
+</svg>
+<svg aria-hidden="true" class="pin-icon" viewbox="0 0 24 24">
+<path d="M12 17v5"></path>
+<path d="M5 17h14"></path>
+<path d="M7 17l1.5-7V5h7v5L17 17"></path>
+<path d="M9 5V2h6v3"></path>
+</svg>
+</button>
+</div>
+<div class="toc-search">
+  <input autocomplete="off" id="tocSearch" placeholder="搜索题目 / 类型…" type="text"/>
+</div>
+<nav aria-label="文档目录" class="toc-wrap">
+<div class="toc-title">目录</div>
+<ul class="toc" id="toc"></ul>
+</nav>
+<div class="sidebar-footer">
+<div aria-label="主题切换" class="theme-switcher">
+<button class="theme-btn" data-theme="light" type="button">暖白</button>
+<button class="theme-btn" data-theme="dark" type="button">One Dark</button>
+<button class="theme-btn" data-theme="eye" type="button">护眼</button>
+</div>
+</div>
+</div>
+</aside>
+<main class="main" id="mainScroller">
+  <div class="read-progress"><div class="bar" id="readProgressBar"></div></div>
+<div class="document">
+<header class="meta-card">
+  <div class="doc-type">刷题资料整理 · 《代码随想录》栈与队列专题</div>
+  <h1>《代码随想录》栈与队列 · 题目网页总结</h1>
+  <div class="abstract"><strong>摘要：</strong>根据《代码随想录》栈与队列（V3.0）PDF 整理，收录全部 7 道示例题的网页入口（LeetCode 题目页、代码随想录题解、B 站公开课视频），并为每道题补充完整题目描述、解题思路、复杂度分析与 LeetCode 核心代码模式的 C++ 代码，附延伸练习与栈与队列总结篇要点。</div>
+  <div class="keywords">
+    <span class="tag">栈</span>
+    <span class="tag">队列</span>
+    <span class="tag">容器适配器</span>
+    <span class="tag">单调队列</span>
+    <span class="tag">优先级队列</span>
+    <span class="tag">C++ 代码</span>
+    <span class="tag">共 7 题</span>
+  </div>
+</header>
+<article id="docContent">
+  <h1>专题概览</h1>
+  <p>来源文档：<code>6.《代码随想录》栈与队列（V3.0）.pdf</code>，共 <strong>7 道示例题</strong>。本文档按专题归类整理，<strong>每道题包含四部分：完整题目描述（含示例与提示）、解题思路、复杂度分析、LeetCode 核心代码模式的 C++ 代码</strong>。</p>
+  <p>三个入口：<strong>LeetCode 题目页</strong>用于在线做题；<strong>代码随想录题解</strong>为图文思路 + 多语言代码；<strong>B 站公开课</strong>为视频讲解。</p>
+
+<h1>一、栈与队列基础</h1>
+
+<h2>232. 用栈实现队列</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/implement-queue-using-stacks/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0232.用栈实现队列.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1nY4y1w7VC" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：push(x) —— 将元素 x 推到队列的末尾；pop() —— 从队列的开头移除并返回元素；peek() —— 返回队列开头的元素；empty() —— 如果队列为空，返回 true；否则，返回 false。</p>
+<p>说明：你只能使用标准的栈操作 —— 也就是只有 push to top、peek/pop from top、size 和 is empty 操作是合法的。你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。假设所有操作都是有效的（例如，一个空的队列不会调用 pop 或者 peek 操作）。</p>
+<p>进阶：你能否实现每个操作均摊时间复杂度为 O(1) 的队列？换句话说，执行 n 个操作的总时间复杂度为 O(n)，即使其中一个操作可能花费较长时间。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：["MyQueue", "push", "push", "peek", "pop", "empty"]，[[], [1], [2], [], [], []]</td><td>输出：[null, null, null, 1, 1, false]</td></tr><tr><td>示例 1 解释</td><td>MyQueue myQueue = new MyQueue(); myQueue.push(1); myQueue.push(2); myQueue.peek(); // 返回 1；myQueue.pop(); // 返回 1；myQueue.empty(); // 返回 false</td><td>说明：peek() 返回队首元素 1，pop() 返回 1，empty() 返回 false</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>只能使用标准的栈操作：push to top、peek/pop from top、size 和 is empty</li><li>假设所有操作都是有效的（例如，一个空的队列不会调用 pop 或者 peek 操作）</li><li>1 &lt;= x &lt;= 9，最多调用 100 次 push、pop、peek 和 empty</li><li>进阶：能否实现每个操作均摊时间复杂度为 O(1) 的队列</li></ul>
+<h3>解题思路</h3>
+<p>用两个栈模拟队列：一个输入栈负责 push，一个输出栈负责 pop 与 peek。push(x) 将元素压入输入栈；pop() 时若输出栈为空，则把输入栈元素全部弹出并压入输出栈（顺序被反转，队列头变为输出栈栈顶），再从输出栈弹出；输出栈非空则直接弹出。peek() 复用 pop() 逻辑取出队首元素后将其放回输出栈。empty() 判断两个栈是否同时为空。核心思想：栈是后进先出，元素经过两个栈两次反转后恢复先进先出的顺序。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度：push/pop/peek/empty 均为 O(1)（pop/peek 均摊 O(1)），空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class MyQueue {
+public:
+    stack&lt;int&gt; stIn;    // 输入栈
+    stack&lt;int&gt; stOut;   // 输出栈
+    MyQueue() {}
+
+    void push(int x) {
+        stIn.push(x);
+    }
+
+    int pop() {
+        // 输出栈为空时，把输入栈全部倒入输出栈（负负得正，顺序复原）
+        if (stOut.empty()) {
+            while (!stIn.empty()) {
+                stOut.push(stIn.top());
+                stIn.pop();
+            }
+        }
+        int res = stOut.top();
+        stOut.pop();
+        return res;
+    }
+
+    int peek() {
+        int res = this-&gt;pop();  // 复用 pop 逻辑
+        stOut.push(res);        // 弹出去的元素再加回来
+        return res;
+    }
+
+    bool empty() {
+        return stIn.empty() &amp;&amp; stOut.empty();
+    }
+};</code></pre></div>
+
+<h2>225. 用队列实现栈</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/implement-stack-using-queues/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0225.用队列实现栈.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1Fd4y1K7sm" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>请你仅使用两个队列实现一个后入先出（LIFO）的栈，并支持普通栈的全部四种操作（push、top、pop 和 empty）。实现 MyStack 类：void push(int x) 将元素 x 压入栈顶；int pop() 移除并返回栈顶元素；int top() 返回栈顶元素；boolean empty() 如果栈是空的，返回 true；否则，返回 false。</p>
+<p>注意：你只能使用队列的基本操作 —— 也就是 push to back、peek/pop from front、size 和 is empty 这些操作。你所使用的语言也许不支持队列。你可以使用 list 或者 deque（双端队列）来模拟一个队列，只要是标准的队列操作即可。</p>
+<p>进阶：你能否仅用一个队列来实现栈？</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：["MyStack", "push", "push", "top", "pop", "empty"]，[[], [1], [2], [], [], []]</td><td>输出：[null, null, null, 2, 2, false]</td></tr><tr><td>示例 1 解释</td><td>MyStack myStack = new MyStack(); myStack.push(1); myStack.push(2); myStack.top(); // 返回 2；myStack.pop(); // 返回 2；myStack.empty(); // 返回 false</td><td>说明：top() 返回栈顶元素 2，pop() 返回 2，empty() 返回 false</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>只能使用队列的基本操作：push to back、peek/pop from front、size 和 is empty</li><li>每次调用 pop 和 top 都保证栈不为空</li><li>1 &lt;= x &lt;= 9，最多调用 100 次 push、pop、top 和 empty</li><li>进阶：能否仅用一个队列实现栈</li></ul>
+<h3>解题思路</h3>
+<p>用队列模拟栈（可只用单队列，也可用双队列）。单队列做法：push(x) 直接入队；pop() 时把队列前 n-1 个元素依次出队并入队尾，剩下的队首元素即栈顶，出队即可；top() 同样把前 n-1 个元素移到队尾后读取队首，再把该元素放回队尾。双队列做法：用备份队列辅助，pop/top 时先把主队列除最后一个元素外全部暂存到备份队列，处理完再倒回。本质是利用队列先进先出的特性，通过移动元素改变出队顺序以模拟后进先出。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度：push 与 empty 为 O(1)，pop 与 top 为 O(n)，空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class MyStack {
+public:
+    queue&lt;int&gt; que;
+    MyStack() {}
+
+    void push(int x) {
+        que.push(x);
+    }
+
+    int pop() {
+        // 把队尾以外的元素全部搬到队尾之后，队头即栈顶
+        int size = que.size() - 1;
+        while (size--) {
+            que.push(que.front());
+            que.pop();
+        }
+        int res = que.front();
+        que.pop();
+        return res;
+    }
+
+    int top() {
+        return que.back();
+    }
+
+    bool empty() {
+        return que.empty();
+    }
+};</code></pre></div>
+
+<h1>二、栈经典题目</h1>
+
+<h2>20. 有效的括号</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/valid-parentheses/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0020.有效的括号.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1AF411w78g" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s，判断字符串是否有效。</p>
+<p>有效字符串需满足：左括号必须用相同类型的右括号闭合；左括号必须以正确的顺序闭合；每个右括号都有一个对应的相同类型的左括号。</p>
+<p>注意：空字符串可被认为是有效字符串。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入: s = "()"</td><td>输出: true</td></tr><tr><td>示例 2</td><td>输入: s = "()[]{}"</td><td>输出: true</td></tr><tr><td>示例 3</td><td>输入: s = "(]"</td><td>输出: false</td></tr><tr><td>示例 4</td><td>输入: s = "([)]"</td><td>输出: false</td></tr><tr><td>示例 5</td><td>输入: s = "{[]}"</td><td>输出: true</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>1 &lt;= s.length &lt;= 10^4</li><li>s 仅由括号 '()[]{}' 组成</li></ul>
+<h3>解题思路</h3>
+<p>括号匹配是使用栈解决的经典问题，栈的对称特性非常适合匹配类题目。遍历字符串：遇到左括号时，把对应的右括号入栈（技巧：入栈右括号，比较时只需判断当前字符与栈顶是否相等）；遇到右括号时与栈顶比较，不匹配则无效。需要覆盖三种不匹配情况：左括号多余（遍历完栈不空）、括号类型不匹配（栈顶与当前右括号不同）、右括号多余（栈已空）。剪枝：字符串长度为奇数可直接返回 false。遍历结束后栈为空则字符串有效。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    bool isValid(string s) {
+        stack&lt;char&gt; st;
+        for (char c : s) {
+            if (c == '(') st.push(')');
+            else if (c == '[') st.push(']');
+            else if (c == '{') st.push('}');
+            else {                       // 右括号：与栈顶匹配
+                if (st.empty() || st.top() != c) return false;
+                st.pop();
+            }
+        }
+        return st.empty();
+    }
+};</code></pre></div>
+
+<h2>1047. 删除字符串中的所有相邻重复项</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/1047.删除字符串中的所有相邻重复项.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV12a411P7mw" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给出由小写字母组成的字符串 S，重复项删除操作会选择两个相邻且相同的字母，并删除它们。</p>
+<p>在 S 上反复执行重复项删除操作，直到无法继续删除。在完成所有重复项删除操作后返回最终的字符串。答案保证唯一。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入: "abbaca"</td><td>输出: "ca"</td></tr><tr><td>示例 1 解释</td><td>在 "abbaca" 中，我们可以删除 "bb"，得到字符串 "aaca"；其中又只有 "aa" 可以执行重复项删除操作，所以最后的字符串为 "ca"</td><td>删除反复进行直到无法继续删除</td></tr><tr><td>示例 2</td><td>输入: "s"</td><td>输出: "s"</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>1 &lt;= S.length &lt;= 20000</li><li>S 仅由小写英文字母组成</li></ul>
+<h3>解题思路</h3>
+<p>思路与括号匹配类似，是字符串的"对对碰"。遍历字符串，用栈保存结果：当前字符与栈顶相同时，弹出栈顶（消除一对相邻重复）；不同则将该字符入栈。遍历结束后，栈中剩余字符依次弹出即为最终字符串（注意弹出顺序是反的，需反转；也可直接用字符串模拟栈，从尾部比较与删除，省去反转）。题目保证答案唯一，删除操作反复进行直到无法继续删除。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)（用字符串模拟栈时不计返回值的空间为 O(1)）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    string removeDuplicates(string s) {
+        string res;                      // 用字符串模拟栈
+        for (char c : s) {
+            if (!res.empty() &amp;&amp; res.back() == c) {
+                res.pop_back();          // 相邻重复：弹出
+            } else {
+                res.push_back(c);
+            }
+        }
+        return res;
+    }
+};</code></pre></div>
+
+<h2>150. 逆波兰表达式求值</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/evaluate-reverse-polish-notation/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0150.逆波兰表达式求值.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1kd4y1o7on" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>根据 逆波兰表示法，求表达式的值。有效的运算符包括 +、-、*、/ 。每个运算对象可以是整数，也可以是另一个逆波兰表达式。</p>
+<p>说明：整数除法只保留整数部分。给定逆波兰表达式总是有效的。换句话说，表达式总会得出有效数值且不存在除数为 0 的情况。</p>
+<p>逆波兰表达式是一种后缀表达式，所谓后缀就是指运算符写在后面。平常使用的算式则是一种中缀表达式，如 ( 1 + 2 ) * ( 3 + 4 ) 。该算式的逆波兰表达式写法为 ( ( 1 2 + ) ( 3 4 + ) * ) 。逆波兰表达式主要有以下两个优点：去掉括号后表达式无歧义，上式即便写成 1 2 + 3 4 + * 也可以依据次序计算出正确结果；适合用栈操作运算：遇到数字则入栈，遇到算符则取出栈顶两个数字进行计算，并将结果压入栈中。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入: tokens = ["2","1","+","3","*"]</td><td>输出: 9</td></tr><tr><td>示例 1 解释</td><td>该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) = 9</td><td>计算结果为 9</td></tr><tr><td>示例 2</td><td>输入: tokens = ["4","13","5","/","+"]</td><td>输出: 6</td></tr><tr><td>示例 2 解释</td><td>该算式转化为常见的中缀算术表达式为：(4 + (13 / 5)) = 6</td><td>计算结果为 6</td></tr><tr><td>示例 3</td><td>输入: tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]</td><td>输出: 22</td></tr><tr><td>示例 3 解释</td><td>该算式转化为常见的中缀算术表达式为：((10 * (6 / ((9 + 3) * -11))) + 17) + 5</td><td>计算结果为 22</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>整数除法只保留整数部分（向零截断）</li><li>给定逆波兰表达式总是有效的：表达式总会得出有效数值且不存在除数为 0 的情况</li><li>1 &lt;= tokens.length &lt;= 10^4；tokens[i] 是运算符（"+"、"-"、"*" 或 "/"）或范围 [-200, 200] 内的一个整数</li></ul>
+<h3>解题思路</h3>
+<p>逆波兰表达式（后缀表达式）是二叉树后序遍历的序列化形式，去掉括号后无歧义，计算机可用栈顺序处理，无需考虑运算符优先级与回退。遍历 tokens：遇到数字则入栈；遇到运算符时，弹出栈顶两个数字（先弹出的是右操作数），执行运算后将结果压回栈中。遍历结束后，栈顶即为表达式结果。注意：除法向零截断（整数除法只保留整数部分），题目保证表达式总是有效且不存在除数为 0 的情况，中间结果注意数据范围。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    int evalRPN(vector&lt;string&gt;&amp; tokens) {
+        stack&lt;long long&gt; st;
+        for (string&amp; t : tokens) {
+            if (t == "+" || t == "-" || t == "*" || t == "/") {
+                long long b = st.top(); st.pop();
+                long long a = st.top(); st.pop();
+                if (t == "+") st.push(a + b);
+                else if (t == "-") st.push(a - b);
+                else if (t == "*") st.push(a * b);
+                else st.push(a / b);
+            } else {
+                st.push(stoll(t));
+            }
+        }
+        return (int)st.top();
+    }
+};</code></pre></div>
+
+<h1>三、队列经典题目</h1>
+
+<h2>239. 滑动窗口最大值</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/sliding-window-maximum/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0239.滑动窗口最大值.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1XS4y1p7qj" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。</p>
+<p>返回 滑动窗口中的最大值 。</p>
+<p>进阶：你能在线性时间复杂度内解决此题吗？</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入: nums = [1,3,-1,-3,5,3,6,7], k = 3</td><td>输出: [3,3,5,5,6,7]</td></tr><tr><td>示例 1 解释</td><td>滑动窗口位置依次为：1 [3 -1 -3] 5 3 6 7 → 3；1 3 [-1 -3 5] 3 6 7 → 5；1 3 -1 [-3 5 3] 6 7 → 5；1 3 -1 -3 [5 3 6] 7 → 6；1 3 -1 -3 5 [3 6 7] → 7</td><td>输出 [3,3,5,5,6,7]</td></tr><tr><td>示例 2</td><td>输入: nums = [1], k = 1</td><td>输出: [1]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>1 &lt;= nums.length &lt;= 10^5</li><li>-10^4 &lt;= nums[i] &lt;= 10^4</li><li>1 &lt;= k &lt;= nums.length</li><li>进阶：能否在线性时间复杂度内解决此题</li></ul>
+<h3>解题思路</h3>
+<p>本题不能用大顶堆（堆顶元素可能已滑出窗口）。解法是自定义单调递减队列（底层用 deque）：push(value) 时从队尾弹出所有小于 value 的元素后入队，保证队列内从大到小；pop(value) 仅在 value 等于队首时才弹出队首（对应窗口滑出的元素）。窗口每次滑动时，先 push 新元素，再 pop 滑出窗口的元素，此时队首即为当前窗口最大值。每个元素最多入队出队各一次，总复杂度 O(n)，达到线性时间要求。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(k)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    vector&lt;int&gt; maxSlidingWindow(vector&lt;int&gt;&amp; nums, int k) {
+        // 单调队列（存下标）：队头到队尾单调递减，队头即窗口最大值
+        deque&lt;int&gt; dq;
+        vector&lt;int&gt; result;
+        for (int i = 0; i &lt; nums.size(); ++i) {
+            // 1. 弹出滑出窗口的队头
+            if (!dq.empty() &amp;&amp; dq.front() &lt; i - k + 1) dq.pop_front();
+            // 2. 保持单调递减：弹出队尾所有不大于当前值的
+            while (!dq.empty() &amp;&amp; nums[dq.back()] &lt;= nums[i]) dq.pop_back();
+            dq.push_back(i);
+            // 3. 窗口成型后，队头即最大值
+            if (i &gt;= k - 1) result.push_back(nums[dq.front()]);
+        }
+        return result;
+    }
+};</code></pre></div>
+
+<h2>347. 前 K 个高频元素</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/top-k-frequent-elements/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0347.前K个高频元素.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1Xg41167Lz" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。</p>
+<p>进阶：你所设计算法的时间复杂度 必须 优于 O(n log n) ，其中 n 是数组大小。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入: nums = [1,1,1,2,2,3], k = 2</td><td>输出: [1,2]</td></tr><tr><td>示例 2</td><td>输入: nums = [1], k = 1</td><td>输出: [1]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>1 &lt;= nums.length &lt;= 10^5</li><li>k 的取值范围是 [1, 数组中不相同的元素的个数]</li><li>题目数据保证答案唯一，换句话说，数组中前 k 个高频元素的集合是唯一的</li><li>算法的时间复杂度必须优于 O(n log n)，其中 n 是数组大小；可以按任意顺序返回答案</li></ul>
+<h3>解题思路</h3>
+<p>分两步完成：先用哈希表统计每个元素出现的频率；再用大小为 k 的小顶堆（优先级队列，按频率排序）筛选前 k 高。遍历频率表，将元素入堆，当堆大小超过 k 时弹出堆顶（频率最小者），保证堆中始终保留当前出现频率最高的 k 个元素。选小顶堆而非大顶堆的原因：小顶堆每次弹出最小频率元素，最后留下的才是频率最大的前 k 个；大顶堆会先把最大值弹出，无法保留结果。最后从堆中倒序取出元素即为答案。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n log k)，空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    // 小顶堆：堆顶是最小频率，保持堆大小为 k，堆内即前 k 个高频元素
+    class mycomparison {
+    public:
+        bool operator()(const pair&lt;int, int&gt;&amp; lhs, const pair&lt;int, int&gt;&amp; rhs) {
+            return lhs.second &gt; rhs.second;
+        }
+    };
+    vector&lt;int&gt; topKFrequent(vector&lt;int&gt;&amp; nums, int k) {
+        unordered_map&lt;int, int&gt; freq;
+        for (int n : nums) ++freq[n];
+        priority_queue&lt;pair&lt;int, int&gt;, vector&lt;pair&lt;int, int&gt;&gt;, mycomparison&gt; pq;
+        for (auto&amp; it : freq) {
+            pq.push(it);
+            if (pq.size() &gt; k) pq.pop();   // 超过 k 个时弹出最小频率
+        }
+        vector&lt;int&gt; result;
+        while (!pq.empty()) {
+            result.push_back(pq.top().first);
+            pq.pop();
+        }
+        return result;
+    }
+};</code></pre></div>
+
+  <h1>相关题目推荐</h1>
+  <p>文档中提到的延伸练习题：</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>题目</th><th>LeetCode 链接</th></tr></thead>
+    <tbody><tr><td>71. 简化路径</td><td><a href="https://leetcode.cn/problems/simplify-path/" target="_blank" rel="noopener">LeetCode 题目页</a></td></tr><tr><td>1209. 删除字符串中的所有相邻重复项 II</td><td><a href="https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string-ii/" target="_blank" rel="noopener">LeetCode 题目页</a></td></tr></tbody>
+  </table></div>
+
+  <h1>总结篇要点</h1>
+  <ul><li>理论基础：栈与队列是容器适配器，底层容器使用不同（deque 等），导致栈内数据在内存中不一定是连续分布的；栈与队列的基础容易被忽视，但应用广泛。</li><li>栈的经典题目：括号匹配（20）、字符串去重（1047）、逆波兰表达式求值（150），匹配与相邻消除类问题优先考虑用栈解决。</li><li>队列的经典题目：单调队列解决滑动窗口最大值（239），优先级队列（堆）解决前 K 个高频元素（347）。</li><li>整体总结：栈与队列的基础容易被忽视，而单调队列与优先级队列是特殊场景下的重要工具。</li></ul>
+  <div class="note"><div class="note-title">📖 总结篇全文</div><div><a href="https://programmercarl.com/栈与队列总结.html" target="_blank" rel="noopener">代码随想录 · 总结篇</a></div></div>
+
+  <div class="footnotes"><strong>说明：</strong>整理日期 2026-08 · 题目描述、示例与提示取自 LeetCode / 代码随想录 · 代码均为 LeetCode 核心代码模式（class Solution）可直接提交 · 视频为《代码随想录》B 站算法公开课。</div>
+</article>
+</div>
+</main>
+</div>
+<div aria-label="图片预览" aria-modal="true" class="image-modal" id="imageModal" role="dialog">
+<button aria-label="关闭" id="modalClose" type="button">×</button>
+<img alt="图片预览" id="modalImage"/>
+</div>
+<script>
+    const mainScroller = document.getElementById('mainScroller');
+    const toc = document.getElementById('toc');
+    const docContent = document.getElementById('docContent');
+    const collapseBtn = document.getElementById('collapseBtn');
+    const themeButtons = [...document.querySelectorAll('.theme-btn')];
+    const hljsTheme = document.getElementById('hljs-theme');
+
+    function slugify(text, index) {
+      const base = text.trim()
+        .toLowerCase()
+        .replace(/[\s]+/g, '-')
+        .replace(/[^\w\u4e00-\u9fff-]/g, '')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+      return base || `section-${index + 1}`;
+    }
+
+    function ensureHeadingIds(headings) {
+      const used = new Set();
+      headings.forEach((h, index) => {
+        let id = h.id || slugify(h.textContent, index);
+        const original = id;
+        let n = 2;
+        while (used.has(id) || (document.getElementById(id) && document.getElementById(id) !== h)) {
+          id = `${original}-${n++}`;
+        }
+        h.id = id;
+        used.add(id);
+      });
+    }
+
+    function createToc() {
+      const headings = [...docContent.querySelectorAll('h1, h2')];
+      ensureHeadingIds(headings);
+      toc.innerHTML = '';
+
+      const root = document.createElement('ul');
+      root.className = 'toc-root';
+      const listStack = [{ level: 0, ul: root }];
+      const liStack = [];
+
+      headings.forEach((heading) => {
+        const level = Number(heading.tagName.slice(1));
+
+        while (listStack.length && listStack[listStack.length - 1].level >= level) {
+          listStack.pop();
+          liStack.pop();
+        }
+
+        let parentUl = listStack[listStack.length - 1]?.ul || root;
+        const parentLi = liStack[liStack.length - 1];
+
+        if (parentLi && level > (listStack[listStack.length - 1]?.level || 0)) {
+          let childUl = parentLi.querySelector(':scope > ul');
+          if (!childUl) {
+            childUl = document.createElement('ul');
+            parentLi.appendChild(childUl);
+            parentLi.classList.add('has-children');
+          }
+          parentUl = childUl;
+        }
+
+        const li = document.createElement('li');
+        const row = document.createElement('div');
+        row.className = 'toc-row';
+
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'toc-toggle';
+        toggle.textContent = '▾';
+        toggle.title = '折叠/展开';
+        toggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (li.classList.contains('has-children')) li.classList.toggle('collapsed');
+        });
+
+        const link = document.createElement('a');
+        link.className = 'toc-link';
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent.trim();
+        link.title = heading.textContent.trim();
+        link.dataset.target = heading.id;
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.replaceState(null, '', `#${heading.id}`);
+        });
+
+        row.append(toggle, link);
+        li.appendChild(row);
+        parentUl.appendChild(li);
+
+        listStack.push({ level, ul: parentUl });
+        liStack.push(li);
+      });
+
+      while (root.firstChild) toc.appendChild(root.firstChild);
+      return headings;
+    }
+
+    function expandParents(link) {
+      let node = link.closest('li');
+      while (node) {
+        node.classList.remove('collapsed');
+        node = node.parentElement?.closest('li');
+      }
+    }
+
+    function activateToc(id) {
+      const links = [...toc.querySelectorAll('.toc-link')];
+      links.forEach(link => link.classList.toggle('active', link.dataset.target === id));
+      const active = links.find(link => link.dataset.target === id);
+      if (active) {
+        expandParents(active);
+        active.scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    function setupObserver(headings) {
+      if (!headings.length) return;
+      const visible = new Map();
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) visible.set(entry.target.id, entry.boundingClientRect.top);
+          else visible.delete(entry.target.id);
+        });
+
+        if (visible.size) {
+          const current = [...visible.entries()].sort((a, b) => Math.abs(a[1]) - Math.abs(b[1]))[0][0];
+          activateToc(current);
+          return;
+        }
+
+        const scrollerTop = mainScroller.getBoundingClientRect().top;
+        let current = headings[0].id;
+        headings.forEach(h => {
+          if (h.getBoundingClientRect().top - scrollerTop <= 120) current = h.id;
+        });
+        activateToc(current);
+      }, {
+        root: mainScroller,
+        rootMargin: '-8% 0px -70% 0px',
+        threshold: [0, 1]
+      });
+      headings.forEach(h => observer.observe(h));
+      activateToc(headings[0].id);
+    }
+
+    function setTheme(theme) {
+      if (!['dark', 'light', 'eye'].includes(theme)) theme = 'dark';
+      document.documentElement.dataset.theme = theme;
+      try { localStorage.setItem('tech-doc-theme', theme); } catch (_) {}
+
+      hljsTheme.href = theme === 'dark'
+        ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css'
+        : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css';
+
+      themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === theme));
+    }
+
+    themeButtons.forEach(btn => btn.addEventListener('click', () => setTheme(btn.dataset.theme)));
+
+    function updateSidebarButton() {
+      const isFixed = !document.body.classList.contains('sidebar-collapsed');
+      const label = isFixed ? '取消固定并收起目录' : '固定目录';
+
+      collapseBtn.title = label;
+      collapseBtn.setAttribute('aria-label', label);
+      collapseBtn.setAttribute('aria-pressed', String(isFixed));
+    }
+
+    collapseBtn.addEventListener('click', () => {
+      document.body.classList.toggle('sidebar-collapsed');
+      updateSidebarButton();
+    });
+
+    const imageModal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalClose = document.getElementById('modalClose');
+    document.querySelectorAll('.figure img').forEach(img => {
+      img.addEventListener('click', () => {
+        modalImage.src = img.src;
+        modalImage.alt = img.alt || '图片预览';
+        imageModal.classList.add('open');
+      });
+    });
+    function closeModal() {
+      imageModal.classList.remove('open');
+      modalImage.removeAttribute('src');
+    }
+    modalClose.addEventListener('click', closeModal);
+    imageModal.addEventListener('click', e => { if (e.target === imageModal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    setTheme(document.documentElement.dataset.theme || 'dark');
+    updateSidebarButton();
+    const headings = createToc();
+    setupObserver(headings);
+    if (window.hljs) hljs.highlightAll();
+    // ===== 目录优化 =====
+    // 分组标题显示题目数（h1 分组后追加 "N 题"）
+    [...toc.querySelectorAll('.toc-link')].forEach(link => {
+      const li = link.closest('li');
+      if (li && li.querySelector(':scope > ul')) {
+        const count = li.querySelectorAll(':scope > ul > li').length;
+        if (count) {
+          const span = document.createElement('span');
+          span.className = 'toc-group-count';
+          span.textContent = count + ' 题';
+          link.appendChild(span);
+        }
+      }
+    });
+    // 目录顶部固定入口：回到顶部
+    const topLink = document.createElement('a');
+    topLink.className = 'toc-link';
+    topLink.textContent = '⬆ 回到顶部';
+    topLink.dataset.fixed = '1';
+    topLink.addEventListener('click', e => {
+      e.preventDefault();
+      mainScroller.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    const topItem = document.createElement('li');
+    topItem.appendChild(topLink);
+    toc.prepend(topItem);
+
+    // 目录搜索过滤：输入关键字实时过滤（自动展开所有分组）
+    const tocSearch = document.getElementById('tocSearch');
+    const tocLinks = [...toc.querySelectorAll('.toc-link')];
+    tocSearch.addEventListener('input', () => {
+      const kw = tocSearch.value.trim().toLowerCase();
+      toc.querySelectorAll('li').forEach(li => li.classList.remove('collapsed'));
+      tocLinks.forEach(link => {
+        if (link.dataset.fixed) return;
+        const li = link.closest('li');
+        li.style.display = (!kw || link.textContent.toLowerCase().includes(kw)) ? '' : 'none';
+      });
+      [...toc.querySelectorAll('li')].forEach(li => {
+        const childUl = li.querySelector(':scope > ul');
+        if (childUl) {
+          const visible = [...childUl.querySelectorAll(':scope > li')]
+            .some(li2 => li2.style.display !== 'none');
+          li.style.display = visible ? '' : 'none';
+        }
+      });
+    });
+
+    // 阅读进度条 + 返回顶部按钮显隐
+    const readProgressBar = document.getElementById('readProgressBar');
+    const backTop = document.getElementById('backTop');
+    mainScroller.addEventListener('scroll', () => {
+      const max = mainScroller.scrollHeight - mainScroller.clientHeight;
+      readProgressBar.style.width = (max > 0 ? (mainScroller.scrollTop / max) * 100 : 0) + '%';
+      backTop.classList.toggle('show', mainScroller.scrollTop > 400);
+    }, { passive: true });
+    backTop.addEventListener('click', () => mainScroller.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
+<button aria-label="返回顶部" class="back-top" id="backTop" title="返回顶部" type="button">↑</button>
+</body>
+</html>

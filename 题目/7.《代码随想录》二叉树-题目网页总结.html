@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+
+<html data-theme="dark" lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="dark light" name="color-scheme"/>
+<title>《代码随想录》二叉树 · 题目网页总结</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css" id="hljs-theme" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script>
+  window.MathJax = { tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] }, svg: { fontCache: "global" } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script>
+    (() => {
+      try {
+        const saved = localStorage.getItem('tech-doc-theme');
+        if (['dark', 'light', 'eye'].includes(saved)) {
+          document.documentElement.dataset.theme = saved;
+        }
+      } catch (_) {}
+    })();
+  </script>
+<style>
+    :root {
+      --sidebar-width: 260px;
+      --sidebar-collapsed-width: 20px;
+      --content-max-width: 980px;
+      --radius: 12px;
+      --transition: 180ms ease;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei",
+        "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif;
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #282c34;
+      --bg-soft: #2c313c;
+      --text: #abb2bf;
+      --text-strong: #d7dae0;
+      --muted: #7f848e;
+      --sidebar-bg: #1e2127;
+      --sidebar-hover: #2a2f38;
+      --card-bg: #21252b;
+      --border: #3b4048;
+      --h1: #c678dd;
+      --h2: #61afef;
+      --h3: #98c379;
+      --h4: #e06c75;
+      --link: #e5c07b;
+      --link-hover: #f0d58c;
+      --accent: #61afef;
+      --active-bg: rgba(97,175,239,.16);
+      --active-text: #d7eaff;
+      --code-bg: #21252b;
+      --inline-code-bg: #343a46;
+      --quote-bg: rgba(97,175,239,.07);
+      --quote-border: #61afef;
+      --tag-bg: rgba(198,120,221,.15);
+      --tag-text: #d7a5e8;
+      --table-stripe: rgba(255,255,255,.025);
+      --shadow: 0 10px 30px rgba(0,0,0,.22);
+      --scroll-thumb: #4b5263;
+      --scroll-track: #21252b;
+      --overlay: rgba(10,12,16,.88);
+    }
+
+    html[data-theme="light"] {
+      --bg: #fff9f0;
+      --bg-soft: #fffdf8;
+      --text: #333;
+      --text-strong: #222;
+      --muted: #766f68;
+      --sidebar-bg: #f5ebe0;
+      --sidebar-hover: #eadfd3;
+      --card-bg: #fffdf8;
+      --border: #ded3c7;
+      --h1: #8f4b8f;
+      --h2: #356f9f;
+      --h3: #477a45;
+      --h4: #a04f45;
+      --link: #4177a8;
+      --link-hover: #245c8d;
+      --accent: #4177a8;
+      --active-bg: rgba(65,119,168,.12);
+      --active-text: #244f75;
+      --code-bg: #f6efe7;
+      --inline-code-bg: #eee4da;
+      --quote-bg: rgba(65,119,168,.06);
+      --quote-border: #6c93b5;
+      --tag-bg: #eee2f0;
+      --tag-text: #754379;
+      --table-stripe: rgba(76,64,52,.035);
+      --shadow: 0 10px 30px rgba(96,72,48,.10);
+      --scroll-thumb: #b8aa9c;
+      --scroll-track: #eee5db;
+      --overlay: rgba(38,33,28,.86);
+    }
+
+    html[data-theme="eye"] {
+      --bg: #f0e6d3;
+      --bg-soft: #f5eddd;
+      --text: #3e3e3e;
+      --text-strong: #2f2f2f;
+      --muted: #716b61;
+      --sidebar-bg: #e4d5bc;
+      --sidebar-hover: #d8c7aa;
+      --card-bg: #f6eedf;
+      --border: #cfc0a5;
+      --h1: #765a73;
+      --h2: #4f6f78;
+      --h3: #5f7350;
+      --h4: #8a6256;
+      --link: #56768b;
+      --link-hover: #3e5f75;
+      --accent: #657f73;
+      --active-bg: rgba(101,127,115,.14);
+      --active-text: #40574c;
+      --code-bg: #e7ddca;
+      --inline-code-bg: #ddd1bd;
+      --quote-bg: rgba(101,127,115,.08);
+      --quote-border: #7d9181;
+      --tag-bg: #ded7bf;
+      --tag-text: #5f6448;
+      --table-stripe: rgba(80,70,55,.035);
+      --shadow: 0 10px 28px rgba(82,68,45,.10);
+      --scroll-thumb: #aa9a7f;
+      --scroll-track: #dfd2bd;
+      --overlay: rgba(46,42,35,.84);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      transition: background var(--transition), color var(--transition);
+    }
+    button { font: inherit; color: inherit; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { color: var(--link-hover); text-decoration: underline; }
+
+    .app { display: flex; width: 100%; height: 100vh; }
+
+    .sidebar {
+      position: relative;
+      z-index: 20;
+      width: var(--sidebar-width);
+      min-width: var(--sidebar-width);
+      height: 100vh;
+      overflow: hidden;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      transition: width var(--transition), min-width var(--transition);
+    }
+    .sidebar-inner {
+      width: var(--sidebar-width);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: opacity 120ms ease;
+    }
+    body.sidebar-collapsed .sidebar {
+      width: var(--sidebar-collapsed-width);
+      min-width: var(--sidebar-collapsed-width);
+      cursor: e-resize;
+    }
+    body.sidebar-collapsed .sidebar .sidebar-inner {
+      opacity: 0;
+      pointer-events: none;
+    }
+    body.sidebar-collapsed .sidebar::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 4px;
+      background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+      opacity: .55;
+    }
+    body.sidebar-collapsed .sidebar:hover {
+      width: var(--sidebar-width);
+      min-width: var(--sidebar-width);
+      cursor: default;
+      box-shadow: 8px 0 26px rgba(0,0,0,.18);
+    }
+    body.sidebar-collapsed .sidebar:hover .sidebar-inner {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sidebar-header {
+      flex: 0 0 58px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px 0 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      min-width: 0;
+      flex: 1;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+    }
+    .icon-btn:hover { background: var(--sidebar-hover); border-color: var(--border); }
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+    .icon-btn .pin-icon,
+    .icon-btn .unpin-icon { display: none; }
+
+    /* 固定展开：按钮表示“取消固定 / 收起” */
+    body:not(.sidebar-collapsed) #collapseBtn .pin-icon { display: block; }
+
+    /* 收起后悬停临时展开：按钮切换为“固定目录” */
+    body.sidebar-collapsed #collapseBtn .unpin-icon { display: block; }
+    body.sidebar-collapsed .sidebar:hover #collapseBtn {
+      background: var(--active-bg);
+      color: var(--active-text);
+      border-color: var(--border);
+    }
+
+    .toc-wrap {
+      flex: 1;
+      overflow: auto;
+      padding: 12px 10px 18px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+    }
+    .toc-title {
+      margin: 4px 8px 10px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .toc, .toc ul { list-style: none; padding: 0; margin: 0; }
+    .toc ul { margin-left: 13px; border-left: 1px solid var(--border); }
+    .toc li { position: relative; }
+    .toc-row { display: flex; align-items: center; min-width: 0; }
+    .toc-toggle {
+      width: 20px;
+      height: 28px;
+      flex: 0 0 20px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: transform var(--transition);
+    }
+    .toc li.collapsed > .toc-row .toc-toggle { transform: rotate(-90deg); }
+    .toc li:not(.has-children) > .toc-row .toc-toggle { visibility: hidden; }
+    .toc li.collapsed > ul { display: none; }
+    .toc-link {
+      min-width: 0;
+      flex: 1;
+      display: block;
+      padding: 6px 8px;
+      border-radius: 7px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .toc-link:hover { background: var(--sidebar-hover); text-decoration: none; }
+    .toc-link.active {
+      background: var(--active-bg);
+      color: var(--active-text);
+      font-weight: 700;
+    }
+
+    .sidebar-footer {
+      flex: 0 0 auto;
+      padding: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .theme-switcher { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .theme-btn {
+      padding: 8px 4px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .theme-btn:hover, .theme-btn.active { background: var(--active-bg); color: var(--active-text); }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--bg);
+      scrollbar-width: thin;
+      scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+    }
+    .main::-webkit-scrollbar, .toc-wrap::-webkit-scrollbar { width: 10px; height: 10px; }
+    .main::-webkit-scrollbar-thumb, .toc-wrap::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 10px; }
+    .main::-webkit-scrollbar-track, .toc-wrap::-webkit-scrollbar-track { background: var(--scroll-track); }
+
+    .document {
+      width: min(calc(100% - 48px), var(--content-max-width));
+      margin: 0 auto;
+      padding: 46px 0 80px;
+    }
+
+    .meta-card {
+      margin-bottom: 44px;
+      padding: 28px 30px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+    }
+    .meta-card .doc-type {
+      margin-bottom: 10px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .meta-card h1 {
+      margin: 0 0 22px;
+      padding: 0;
+      border: 0;
+      text-align: center;
+      color: var(--text-strong);
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.25;
+    }
+    .abstract {
+      margin: 0 0 20px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--quote-border);
+      border-radius: 0 8px 8px 0;
+      background: var(--quote-bg);
+      line-height: 1.85;
+    }
+    .abstract strong { color: var(--text-strong); }
+    .keywords { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .keywords-label { color: var(--muted); font-size: 13px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    article { font-size: 16px; line-height: 1.85; }
+    article h1, article h2, article h3, article h4 {
+      scroll-margin-top: 24px;
+      line-height: 1.35;
+      font-weight: 800;
+    }
+    article h1 {
+      margin: 54px 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--h1);
+      font-size: 2rem;
+    }
+    article h2 {
+      margin: 42px 0 18px;
+      color: var(--h2);
+      font-size: 1.55rem;
+    }
+    article h3 {
+      margin: 32px 0 14px;
+      color: var(--h3);
+      font-size: 1.22rem;
+    }
+    article h4 { margin: 26px 0 12px; color: var(--h4); font-size: 1.05rem; }
+    article p { margin: 0 0 18px; }
+    article strong { color: var(--text-strong); }
+    article em { color: var(--text-strong); }
+    article del { color: var(--muted); }
+    article ul, article ol { margin: 0 0 18px; padding-left: 1.7em; }
+    article li { margin: 6px 0; }
+    article li::marker { color: var(--accent); }
+    article hr { margin: 34px 0; border: 0; border-top: 1px solid var(--border); }
+
+    blockquote {
+      margin: 20px 0;
+      padding: 14px 18px;
+      border-left: 4px solid var(--quote-border);
+      border-radius: 0 8px 8px 0;
+      background: var(--quote-bg);
+      color: var(--text);
+    }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: .92em;
+    }
+    :not(pre) > code {
+      padding: 2px 6px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--inline-code-bg);
+      color: var(--text-strong);
+    }
+    .code-block {
+      position: relative;
+      margin: 20px 0 24px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--code-bg);
+    }
+    .code-label {
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      font: 12px var(--font-mono);
+    }
+    .code-block pre { margin: 0; padding: 16px; overflow: auto; background: transparent; }
+    .code-block pre code { background: transparent !important; }
+
+    .table-wrap { margin: 20px 0 24px; overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { padding: 11px 14px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--bg-soft); color: var(--text-strong); font-weight: 800; }
+    tbody tr:nth-child(even) { background: var(--table-stripe); }
+
+    .task-list { list-style: none; padding-left: 0; }
+    .task-list input { margin-right: 8px; accent-color: var(--accent); }
+
+    .figure {
+      margin: 26px 0;
+      text-align: center;
+    }
+    .figure img {
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      cursor: zoom-in;
+    }
+    .figcaption { margin-top: 9px; color: var(--muted); font-size: 13px; }
+
+    .note {
+      margin: 20px 0;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      background: var(--bg-soft);
+    }
+    .note-title { margin-bottom: 4px; color: var(--text-strong); font-weight: 800; }
+
+    .footnotes {
+      margin-top: 44px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .image-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      background: var(--overlay);
+    }
+    .image-modal.open { display: flex; }
+    .image-modal img { max-width: 95vw; max-height: 90vh; border-radius: 8px; box-shadow: 0 18px 60px rgba(0,0,0,.45); }
+    .image-modal button {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 50%;
+      background: rgba(0,0,0,.28);
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 820px) {
+      :root { --sidebar-width: 235px; }
+      .document { width: min(calc(100% - 28px), var(--content-max-width)); padding-top: 28px; }
+      .meta-card { padding: 22px 20px; }
+    }
+
+    @media print {
+      body { overflow: visible; }
+      .sidebar { display: none; }
+      .main { overflow: visible; height: auto; }
+      .document { width: 100%; max-width: none; padding: 0; }
+      .meta-card { box-shadow: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+      /* ===== 目录优化 ===== */
+    .toc-search { flex: 0 0 auto; padding: 10px 12px 4px; }
+    .toc-search input {
+      width: 100%; padding: 7px 10px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--bg-soft); color: var(--text);
+      font: 13px var(--font-sans); outline: none;
+    }
+    .toc-search input:focus { border-color: var(--accent); }
+    .toc-search input::placeholder { color: var(--muted); }
+    .toc-group-count { color: var(--muted); font-weight: 400; font-size: 11px; margin-left: 5px; }
+
+    /* 阅读进度条（随 main 滚动容器 sticky） */
+    .read-progress {
+      position: sticky; top: 0; height: 3px; z-index: 30;
+      background: transparent; pointer-events: none;
+    }
+    .read-progress .bar {
+      display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--h1));
+    }
+
+    /* 返回顶部按钮 */
+    .back-top {
+      position: fixed; right: 26px; bottom: 30px; z-index: 50;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--card-bg);
+      color: var(--text); box-shadow: var(--shadow);
+      cursor: pointer; font-size: 18px; line-height: 1;
+      display: grid; place-items: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .back-top.show { opacity: 1; pointer-events: auto; }
+    .back-top:hover { transform: translateY(-2px); }
+
+    @media print { .toc-search, .read-progress, .back-top { display: none !important; } }
+  </style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-inner">
+<div class="sidebar-header">
+<div class="brand" title="二叉树专题目录">二叉树专题目录</div>
+<button aria-label="取消固定并收起目录" aria-pressed="true" class="icon-btn" id="collapseBtn" title="取消固定并收起目录" type="button">
+<svg aria-hidden="true" class="unpin-icon" viewbox="0 0 24 24">
+<path d="M12 17v5"></path>
+<path d="M5 17h14"></path>
+<path d="M7 17l1.5-7V5h7v5L17 17"></path>
+<path d="M9 5V2h6v3"></path>
+<path d="M4 4l16 16"></path>
+</svg>
+<svg aria-hidden="true" class="pin-icon" viewbox="0 0 24 24">
+<path d="M12 17v5"></path>
+<path d="M5 17h14"></path>
+<path d="M7 17l1.5-7V5h7v5L17 17"></path>
+<path d="M9 5V2h6v3"></path>
+</svg>
+</button>
+</div>
+<div class="toc-search">
+  <input autocomplete="off" id="tocSearch" placeholder="搜索题目 / 类型…" type="text"/>
+</div>
+<nav aria-label="文档目录" class="toc-wrap">
+<div class="toc-title">目录</div>
+<ul class="toc" id="toc"></ul>
+</nav>
+<div class="sidebar-footer">
+<div aria-label="主题切换" class="theme-switcher">
+<button class="theme-btn" data-theme="light" type="button">暖白</button>
+<button class="theme-btn" data-theme="dark" type="button">One Dark</button>
+<button class="theme-btn" data-theme="eye" type="button">护眼</button>
+</div>
+</div>
+</div>
+</aside>
+<main class="main" id="mainScroller">
+  <div class="read-progress"><div class="bar" id="readProgressBar"></div></div>
+<div class="document">
+<header class="meta-card">
+  <div class="doc-type">刷题资料整理 · 《代码随想录》二叉树专题</div>
+  <h1>《代码随想录》二叉树 · 题目网页总结</h1>
+  <div class="abstract"><strong>摘要：</strong>根据《代码随想录》二叉树（V3.0）PDF 整理，收录全部 37 道示例题的网页入口（LeetCode 题目页、代码随想录题解、B 站公开课视频），并为每道题补充完整题目描述、解题思路、复杂度分析与 LeetCode 核心代码模式的 C++ 代码，按遍历方式 / 求属性 / 修改与构造 / 二叉搜索树归类，附延伸练习与二叉树总结篇要点。</div>
+  <div class="keywords">
+    <span class="tag">二叉树</span>
+    <span class="tag">递归遍历</span>
+    <span class="tag">层序遍历</span>
+    <span class="tag">二叉搜索树</span>
+    <span class="tag">最近公共祖先</span>
+    <span class="tag">C++ 代码</span>
+    <span class="tag">共 37 题</span>
+  </div>
+</header>
+<article id="docContent">
+  <h1>专题概览</h1>
+  <p>来源文档：<code>7.《代码随想录》二叉树（V3.0）.pdf</code>，共 <strong>37 道示例题</strong>。本文档按专题归类整理，<strong>每道题包含四部分：完整题目描述（含示例与提示）、解题思路、复杂度分析、LeetCode 核心代码模式的 C++ 代码</strong>。</p>
+  <p>三个入口：<strong>LeetCode 题目页</strong>用于在线做题；<strong>代码随想录题解</strong>为图文思路 + 多语言代码；<strong>B 站公开课</strong>为视频讲解。</p>
+
+<h1>一、遍历方式</h1>
+
+<h2>144. 二叉树的前序遍历</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/binary-tree-preorder-traversal/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/二叉树的递归遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1Wh411S7xt" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你二叉树的根节点 root ，返回它节点值的 前序 遍历。</p>
+<p>前序遍历的顺序是"中左右"：先处理中间节点（根节点），再递归遍历左子树，最后递归遍历右子树。</p>
+<p>进阶：递归算法很简单，你可以通过迭代算法完成吗？</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,null,2,3]</td><td>输出：[1,2,3]</td></tr><tr><td>示例 2</td><td>输入：root = [1,2,3,4,5,null,8,null,null,6,7,9]</td><td>输出：[1,2,4,5,6,7,3,8,9]</td></tr><tr><td>示例 3</td><td>输入：root = []</td><td>输出：[]</td></tr><tr><td>示例 4</td><td>输入：root = [1]</td><td>输出：[1]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数目在范围 [0, 100] 内</li><li>-100 &lt;= Node.val &lt;= 100</li><li>进阶：递归算法很简单，你可以通过迭代算法完成吗？</li></ul>
+<h3>解题思路</h3>
+<p>递归三要素：确定递归函数的参数和返回值（传入当前节点与结果容器，返回 void）；确定终止条件（当前节点为空则返回）；确定单层递归的逻辑（前序先取中节点值，再递归左子树、右子树）。前序遍历顺序为中左右。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)（递归调用栈，最坏情况树退化为链状）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    void traversal(TreeNode* cur, vector&lt;int&gt;&amp; vec) {
+        if (cur == nullptr) return;
+        vec.push_back(cur-&gt;val);      // 中
+        traversal(cur-&gt;left, vec);    // 左
+        traversal(cur-&gt;right, vec);   // 右
+    }
+    vector&lt;int&gt; preorderTraversal(TreeNode* root) {
+        vector&lt;int&gt; result;
+        traversal(root, result);
+        return result;
+    }
+};</code></pre></div>
+
+<h2>145. 二叉树的后序遍历</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/binary-tree-postorder-traversal/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/二叉树的递归遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给你一棵二叉树的根节点 root ，返回其节点值的 后序遍历 。</p>
+<p>后序遍历的顺序是"左右中"：先递归遍历左子树，再递归遍历右子树，最后处理中间节点（根节点）。</p>
+<p>进阶：递归算法很简单，你可以通过迭代算法完成吗？</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,null,2,3]</td><td>输出：[3,2,1]</td></tr><tr><td>示例 2</td><td>输入：root = [1,2,3,4,5,null,8,null,null,6,7,9]</td><td>输出：[4,6,7,5,2,9,8,3,1]</td></tr><tr><td>示例 3</td><td>输入：root = []</td><td>输出：[]</td></tr><tr><td>示例 4</td><td>输入：root = [1]</td><td>输出：[1]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点的数目在范围 [0, 100] 内</li><li>-100 &lt;= Node.val &lt;= 100</li><li>进阶：递归算法很简单，你可以通过迭代算法完成吗？</li></ul>
+<h3>解题思路</h3>
+<p>递归后序遍历（左右中）：先递归左子树、再递归右子树、最后处理中间节点。迭代法可以调整先序遍历的代码顺序变成中右左的遍历顺序，最后反转 result 数组即可得到后序遍历结果。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)（递归调用栈，最坏情况）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    void traversal(TreeNode* cur, vector&lt;int&gt;&amp; vec) {
+        if (cur == nullptr) return;
+        traversal(cur-&gt;left, vec);    // 左
+        traversal(cur-&gt;right, vec);   // 右
+        vec.push_back(cur-&gt;val);      // 中
+    }
+    vector&lt;int&gt; postorderTraversal(TreeNode* root) {
+        vector&lt;int&gt; result;
+        traversal(root, result);
+        return result;
+    }
+};</code></pre></div>
+
+<h2>94. 二叉树的中序遍历</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/binary-tree-inorder-traversal/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/二叉树的递归遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给定一个二叉树的根节点 root ，返回 它的 中序 遍历 。</p>
+<p>中序遍历的顺序是"左中右"：先递归遍历左子树，再处理中间节点（根节点），最后递归遍历右子树。</p>
+<p>进阶: 递归算法很简单，你可以通过迭代算法完成吗？</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,null,2,3]</td><td>输出：[1,3,2]</td></tr><tr><td>示例 2</td><td>输入：root = []</td><td>输出：[]</td></tr><tr><td>示例 3</td><td>输入：root = [1]</td><td>输出：[1]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数目在范围 [0, 100] 内</li><li>-100 &lt;= Node.val &lt;= 100</li><li>进阶: 递归算法很简单，你可以通过迭代算法完成吗？</li></ul>
+<h3>解题思路</h3>
+<p>递归中序遍历（左中右）。迭代中序与前序不同：前序遍历中访问节点和处理节点可以同步，中序则无法同步，需要用指针 cur 一路将左节点入栈，到树最左面底部后弹出处理（中），再转向右子树。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)（递归或迭代栈，最坏情况）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    void traversal(TreeNode* cur, vector&lt;int&gt;&amp; vec) {
+        if (cur == nullptr) return;
+        traversal(cur-&gt;left, vec);    // 左
+        vec.push_back(cur-&gt;val);      // 中
+        traversal(cur-&gt;right, vec);   // 右
+    }
+    vector&lt;int&gt; inorderTraversal(TreeNode* root) {
+        vector&lt;int&gt; result;
+        traversal(root, result);
+        return result;
+    }
+};</code></pre></div>
+
+<h2>102. 二叉树的层序遍历</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/binary-tree-level-order-traversal/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0102.二叉树的层序遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1GY4y1u7b2" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你二叉树的根节点 root ，返回其节点值的 层序遍历 。（即逐层地，从左到右访问所有节点）。</p>
+<p>层序遍历需要借用一个辅助数据结构即队列来实现，队列先进先出，符合一层一层遍历的逻辑；这种层序遍历方式就是图论中的广度优先遍历。</p>
+<p>代码可作为模板：每次先取 size = que.size()，处理完当前层再进入下一层。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [3,9,20,null,null,15,7]</td><td>输出：[[3],[9,20],[15,7]]</td></tr><tr><td>示例 2</td><td>输入：root = [1]</td><td>输出：[[1]]</td></tr><tr><td>示例 3</td><td>输入：root = []</td><td>输出：[]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数目在范围 [0, 2000] 内</li><li>-1000 &lt;= Node.val &lt;= 1000</li></ul>
+<h3>解题思路</h3>
+<p>队列辅助层序遍历：根节点入队，循环中先取当前层大小 size，弹出 size 个节点收集为当前层结果并依次将左右孩子入队，一层处理完结果放入总结果数组，继续下一层。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)（队列存储一层节点）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    vector&lt;vector&lt;int&gt;&gt; levelOrder(TreeNode* root) {
+        vector&lt;vector&lt;int&gt;&gt; result;
+        queue&lt;TreeNode*&gt; que;
+        if (root) que.push(root);
+        while (!que.empty()) {
+            int size = que.size();           // 记录当前层节点数
+            vector&lt;int&gt; level;
+            while (size--) {
+                TreeNode* node = que.front();
+                que.pop();
+                level.push_back(node-&gt;val);
+                if (node-&gt;left) que.push(node-&gt;left);
+                if (node-&gt;right) que.push(node-&gt;right);
+            }
+            result.push_back(level);
+        }
+        return result;
+    }
+};</code></pre></div>
+
+<h2>107. 二叉树的层序遍历 II</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/binary-tree-level-order-traversal-ii/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0102.二叉树的层序遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给你二叉树的根节点 root ，返回其节点值 自底向上的层序遍历 。（即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）。</p>
+<p>相对于 102.二叉树的层序遍历，就是最后把 result 数组反转一下就可以了。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [3,9,20,null,null,15,7]</td><td>输出：[[15,7],[9,20],[3]]</td></tr><tr><td>示例 2</td><td>输入：root = [1]</td><td>输出：[[1]]</td></tr><tr><td>示例 3</td><td>输入：root = []</td><td>输出：[]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数目在范围 [0, 2000] 内</li><li>-1000 &lt;= Node.val &lt;= 1000</li></ul>
+<h3>解题思路</h3>
+<p>复用 102 层序遍历模板，每层结果从左到右收集后存入 result，最后把整个 result 数组反转，即可得到自底向上的层序遍历结果。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    vector&lt;vector&lt;int&gt;&gt; levelOrderBottom(TreeNode* root) {
+        vector&lt;vector&lt;int&gt;&gt; result;
+        queue&lt;TreeNode*&gt; que;
+        if (root) que.push(root);
+        while (!que.empty()) {
+            int size = que.size();
+            vector&lt;int&gt; level;
+            while (size--) {
+                TreeNode* node = que.front();
+                que.pop();
+                level.push_back(node-&gt;val);
+                if (node-&gt;left) que.push(node-&gt;left);
+                if (node-&gt;right) que.push(node-&gt;right);
+            }
+            result.push_back(level);
+        }
+        reverse(result.begin(), result.end());   // 整体反转
+        return result;
+    }
+};</code></pre></div>
+
+<h2>199. 二叉树的右视图</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/binary-tree-right-side-view/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0102.二叉树的层序遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给定一个二叉树的 根节点 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。</p>
+<p>层序遍历的时候，判断是否遍历到单层的最后面的元素，如果是，就放进 result 数组中，随后返回 result 就可以了。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,2,3,null,5,null,4]</td><td>输出：[1,3,4]</td></tr><tr><td>示例 2</td><td>输入：root = [1,2,3,4,null,null,null,5]</td><td>输出：[1,3,4,5]</td></tr><tr><td>示例 3</td><td>输入：root = [1,null,3]</td><td>输出：[1,3]</td></tr><tr><td>示例 4</td><td>输入：root = []</td><td>输出：[]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>节点个数范围 [0,100]</li><li>Node.val 范围 -100 到 100</li></ul>
+<h3>解题思路</h3>
+<p>层序遍历模板，遍历每一层时记录该层最后一个节点（即 i == size - 1 的节点）的值放入结果数组，得到的就是每层从右侧能看到的最右节点。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    vector&lt;int&gt; rightSideView(TreeNode* root) {
+        vector&lt;int&gt; result;
+        queue&lt;TreeNode*&gt; que;
+        if (root) que.push(root);
+        while (!que.empty()) {
+            int size = que.size();
+            TreeNode* node = nullptr;
+            while (size--) {
+                node = que.front();
+                que.pop();
+                if (node-&gt;left) que.push(node-&gt;left);
+                if (node-&gt;right) que.push(node-&gt;right);
+            }
+            result.push_back(node-&gt;val);   // 每层最后一个节点
+        }
+        return result;
+    }
+};</code></pre></div>
+
+<h2>637. 二叉树的层平均值</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/average-of-levels-in-binary-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0102.二叉树的层序遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给定一个非空二叉树的根节点 root , 以数组的形式返回每一层节点的平均值。与实际答案相差 10-5 以内的答案可以被接受。</p>
+<p>本题就是层序遍历的时候把一层求个总和再取一个均值。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [3,9,20,null,null,15,7]</td><td>输出：[3.00000,14.50000,11.00000]</td></tr><tr><td>示例 2</td><td>输入：root = [3,9,20,15,7]</td><td>输出：[3.00000,14.50000,11.00000]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数量在 [1, 10^4] 范围内</li><li>-2^31 &lt;= Node.val &lt;= 2^31 - 1</li></ul>
+<h3>解题思路</h3>
+<p>层序遍历模板，每一层用 double 型 sum 累加节点值，该层结束后 sum / size 得到层平均值放入结果数组。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    vector&lt;double&gt; averageOfLevels(TreeNode* root) {
+        vector&lt;double&gt; result;
+        queue&lt;TreeNode*&gt; que;
+        if (root) que.push(root);
+        while (!que.empty()) {
+            int size = que.size();
+            double sum = 0;
+            for (int i = 0; i &lt; size; ++i) {
+                TreeNode* node = que.front();
+                que.pop();
+                sum += node-&gt;val;
+                if (node-&gt;left) que.push(node-&gt;left);
+                if (node-&gt;right) que.push(node-&gt;right);
+            }
+            result.push_back(sum / size);   // 层平均值
+        }
+        return result;
+    }
+};</code></pre></div>
+
+<h2>429. N 叉树的层序遍历</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/n-ary-tree-level-order-traversal/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0102.二叉树的层序遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给定一个 N 叉树，返回其节点值的层序遍历。（即从左到右，逐层遍历）。树的序列化输入是用层序遍历，每组子节点都由 null 值分隔（参见示例）。</p>
+<p>这道题依旧是模板题，只不过一个节点有多个孩子了，遍历的时候把 node-&gt;children 全部入队。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,null,3,2,4,null,5,6]</td><td>输出：[[1],[3,2,4],[5,6]]</td></tr><tr><td>示例 2</td><td>输入：root = [1,null,2,3,4,5,null,null,6,7,null,8,null,9,10,null,null,11,null,12,null,13,null,null,14]</td><td>输出：[[1],[2,3,4,5],[6,7,8,9,10],[11,12,13],[14]]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树的高度不会超过 1000</li><li>树的节点总数在 [0, 10^4] 之间</li></ul>
+<h3>解题思路</h3>
+<p>层序遍历模板题：根节点入队，每层先取 size，弹出时收集节点值并把该节点所有孩子（node-&gt;children）全部入队，与二叉树层序遍历唯一区别是孩子入队改为遍历 children 列表。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    vector&lt;vector&lt;int&gt;&gt; levelOrder(Node* root) {
+        vector&lt;vector&lt;int&gt;&gt; result;
+        queue&lt;Node*&gt; que;
+        if (root) que.push(root);
+        while (!que.empty()) {
+            int size = que.size();
+            vector&lt;int&gt; level;
+            while (size--) {
+                Node* node = que.front();
+                que.pop();
+                level.push_back(node-&gt;val);
+                for (Node* child : node-&gt;children) {   // 遍历所有孩子
+                    if (child) que.push(child);
+                }
+            }
+            result.push_back(level);
+        }
+        return result;
+    }
+};</code></pre></div>
+
+<h2>515. 在每个树行中找最大值</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/find-largest-value-in-each-tree-row/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0102.二叉树的层序遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给定一棵二叉树的根节点 root ，请找出该二叉树中每一层的最大值。</p>
+<p>层序遍历，取每一层的最大值，每层用 INT_MIN 初始化并逐个比较。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,3,2,5,3,null,9]</td><td>输出：[1,3,9]</td></tr><tr><td>示例 2</td><td>输入：root = [1,2,3]</td><td>输出：[1,3]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>二叉树的节点个数的范围是 [0, 10^4]</li><li>-2^31 &lt;= Node.val &lt;= 2^31 - 1</li></ul>
+<h3>解题思路</h3>
+<p>层序遍历模板，每层用 INT_MIN 初始化 maxVal，遍历该层节点时逐个比较更新，该层结束后把最大值放入结果数组。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    vector&lt;int&gt; largestValues(TreeNode* root) {
+        vector&lt;int&gt; result;
+        queue&lt;TreeNode*&gt; que;
+        if (root) que.push(root);
+        while (!que.empty()) {
+            int size = que.size();
+            int maxVal = INT_MIN;
+            while (size--) {
+                TreeNode* node = que.front();
+                que.pop();
+                maxVal = max(maxVal, node-&gt;val);
+                if (node-&gt;left) que.push(node-&gt;left);
+                if (node-&gt;right) que.push(node-&gt;right);
+            }
+            result.push_back(maxVal);    // 每层最大值
+        }
+        return result;
+    }
+};</code></pre></div>
+
+<h2>116. 填充每个节点的下一个右侧节点指针</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0102.二叉树的层序遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。初始状态下，所有 next 指针都被设置为 NULL。</p>
+<p>本题依然是层序遍历，只不过在单层遍历的时候记录一下本层的头部节点，然后在遍历的时候让前一个节点指向本节点就可以了，最后让本层最后一个节点 next 指向 NULL。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,2,3,4,5,6,7]</td><td>输出：[1,#,2,3,#,4,5,6,7,#]</td></tr><tr><td>示例 2</td><td>输入：root = []</td><td>输出：[]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点的数量在 [0, 2^12 - 1] 范围内</li><li>-1000 &lt;= node.val &lt;= 1000</li><li>进阶：你只能使用常量级额外空间；使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度</li></ul>
+<h3>解题思路</h3>
+<p>层序遍历时，单层内记录前一个节点 pre，遍历当前层节点时让 pre-&gt;next 指向当前节点并更新 pre，本层结束后让最后一个节点 next 指向 NULL。序列化输出中 # 标志着每一层的结束。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)（队列）；进阶可仅用 next 指针达到 O(1) 额外空间</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    Node* connect(Node* root) {
+        queue&lt;Node*&gt; que;
+        if (root) que.push(root);
+        while (!que.empty()) {
+            int size = que.size();
+            Node* prev = nullptr;
+            while (size--) {
+                Node* node = que.front();
+                que.pop();
+                if (prev) prev-&gt;next = node;   // 连接同层相邻节点
+                prev = node;
+                if (node-&gt;left) que.push(node-&gt;left);
+                if (node-&gt;right) que.push(node-&gt;right);
+            }
+        }
+        return root;
+    }
+};</code></pre></div>
+
+<h2>117. 填充每个节点的下一个右侧节点指针 II</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0102.二叉树的层序遍历.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给定一个二叉树，填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。初始状态下，所有 next 指针都被设置为 NULL。</p>
+<p>这道题目说是二叉树，但 116 题目说是完美二叉树，其实没有任何差别，一样的代码一样的逻辑一样的味道。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,2,3,4,5,null,7]</td><td>输出：[1,#,2,3,#,4,5,7,#]</td></tr><tr><td>示例 2</td><td>输入：root = []</td><td>输出：[]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点的数量在 [0, 6000] 范围内</li><li>-100 &lt;= Node.val &lt;= 100</li><li>进阶：你只能使用常量级额外空间；使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度</li></ul>
+<h3>解题思路</h3>
+<p>与 116 完全相同的层序遍历写法：单层内让前一个节点指向当前节点，本层最后一个节点 next 指向 NULL。题目是否为完美二叉树不影响处理逻辑。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)（队列）；进阶可仅用 next 指针达到 O(1) 额外空间</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    Node* connect(Node* root) {
+        queue&lt;Node*&gt; que;
+        if (root) que.push(root);
+        while (!que.empty()) {           // 通用层序遍历写法
+            int size = que.size();
+            Node* prev = nullptr;
+            while (size--) {
+                Node* node = que.front();
+                que.pop();
+                if (prev) prev-&gt;next = node;
+                prev = node;
+                if (node-&gt;left) que.push(node-&gt;left);
+                if (node-&gt;right) que.push(node-&gt;right);
+            }
+        }
+        return root;
+    }
+};</code></pre></div>
+
+<h1>二、求二叉树的属性</h1>
+
+<h2>101. 对称二叉树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/symmetric-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0101.对称二叉树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1ue4y1Y7Mf" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你一个二叉树的根节点 root ， 检查它是否轴对称。</p>
+<p>判断对称二叉树要比较的是根节点的左子树与右子树是不是相互翻转的，即比较两个子树的里侧和外侧的元素是否相等。</p>
+<p>本题遍历只能是后序遍历（一棵树是左右中，一棵树是右左中），因为要通过递归函数的返回值来判断两个子树的内侧节点和外侧节点是否相等。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,2,2,3,4,4,3]</td><td>输出：true</td></tr><tr><td>示例 2</td><td>输入：root = [1,2,2,null,3,null,3]</td><td>输出：false</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数目在范围 [1, 1000] 内</li><li>-100 &lt;= Node.val &lt;= 100</li></ul>
+<h3>解题思路</h3>
+<p>递归三部曲：参数为左子树节点和右子树节点，返回 bool；终止条件先处理空节点（左空右空对称，一空一非空不对称）；单层逻辑比较外侧（left.left 与 right.right）和内侧（left.right 与 right.left）是否相等。也可用队列/栈成对入队迭代比较。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    bool compare(TreeNode* left, TreeNode* right) {
+        if (left == nullptr &amp;&amp; right == nullptr) return true;
+        if (left == nullptr || right == nullptr) return false;
+        if (left-&gt;val != right-&gt;val) return false;
+        // 外侧与内侧分别比较
+        return compare(left-&gt;left, right-&gt;right) &amp;&amp; compare(left-&gt;right, right-&gt;left);
+    }
+    bool isSymmetric(TreeNode* root) {
+        if (root == nullptr) return true;
+        return compare(root-&gt;left, root-&gt;right);
+    }
+};</code></pre></div>
+
+<h2>104. 二叉树的最大深度</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/maximum-depth-of-binary-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0104.二叉树的最大深度.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1Gd4y1V75u" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定一个二叉树，找出其最大深度。二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。说明: 叶子节点是指没有子节点的节点。</p>
+<p>根节点的高度就是二叉树的最大深度。递归后序求高度：先算左子树深度，再算右子树深度，取较大值后加 1；也可以前序求深度（向下走深层数加 1、回溯后减 1），或层序迭代求层数。</p>
+<p>迭代法用层序遍历最为合适，因为最大的深度就是二叉树的层数，和层序遍历的方式极其吻合。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [3,9,20,null,null,15,7]</td><td>输出：3</td></tr><tr><td>示例 2</td><td>输入：root = [1,null,2]</td><td>输出：2</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数量范围为 0 到 10^4</li><li>节点值范围为 -100 到 100</li></ul>
+<h3>解题思路</h3>
+<p>递归后序（左右中）：终止条件为空节点返回 0，单层逻辑返回 1 + max(左子树深度, 右子树深度)。也可用前序递归携带 depth 更新最大值，或用层序遍历每处理完一层 depth++。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈，最坏 O(n)）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (root == nullptr) return 0;
+        return 1 + max(maxDepth(root-&gt;left), maxDepth(root-&gt;right));
+    }
+};</code></pre></div>
+
+<h2>111. 二叉树的最小深度</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/minimum-depth-of-binary-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0111.二叉树的最小深度.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1QD4y1B7e2" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定一个二叉树，找出其最小深度。最小深度是从根节点到最近叶子节点的最短路径上的节点数量。说明: 叶子节点是指没有子节点的节点。</p>
+<p>与最大深度的区别：只有当左右孩子都为空的时候才说明遍历到了最低点，如果其中一个孩子为空则不是最低点，不能直接取左右子树深度的最小值，否则会把没有左孩子的分支误算为最短深度。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [3,9,20,null,null,15,7]</td><td>输出：2</td></tr><tr><td>示例 2</td><td>输入：root = [2,null,3,null,4,null,5,null,6]</td><td>输出：5</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数的范围在 [0, 10^5] 内</li><li>-1000 &lt;= Node.val &lt;= 1000</li></ul>
+<h3>解题思路</h3>
+<p>后序递归：左子树为空右子树不为空返回 1 + 右子树深度，右子树为空左子树不为空返回 1 + 左子树深度，左右都不为空返回 1 + min(左右深度)。层序遍历更直观：每进入一层 depth++，遇到第一个左右孩子都为空的节点直接返回当前 depth。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈，最坏 O(n)）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (root == nullptr) return 0;
+        int left = minDepth(root-&gt;left);
+        int right = minDepth(root-&gt;right);
+        // 注意：左右子树有一个为空时，最小深度在另一侧（不能取 min 的 0）
+        if (root-&gt;left == nullptr) return 1 + right;
+        if (root-&gt;right == nullptr) return 1 + left;
+        return 1 + min(left, right);
+    }
+};</code></pre></div>
+
+<h2>222. 完全二叉树的节点个数</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/count-complete-tree-nodes/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0222.完全二叉树的节点个数.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1eW4y1B7pD" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你一棵 完全二叉树 的根节点 root ，求出该树的节点个数。</p>
+<p>完全二叉树只有两种情况：满二叉树，或最后一层叶子节点没有满。若是满二叉树，可直接用公式 2^depth - 1 计算节点数（根节点深度为 1）；若不是满二叉树，则递归其左右孩子，直到遇到满二叉树为止。</p>
+<p>判断子树是否为满二叉树：在完全二叉树中，若从当前节点向左走到最左的深度等于向右走到最右的深度，则说明该子树是满二叉树。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,2,3,4,5,6]</td><td>输出：6</td></tr><tr><td>示例 2</td><td>输入：root = []</td><td>输出：0</td></tr><tr><td>示例 3</td><td>输入：root = [1]</td><td>输出：1</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数目范围 [0, 5 * 10^4]</li><li>节点值范围 [0, 5 * 10^4]</li><li>题目数据保证输入的树是完全二叉树</li></ul>
+<h3>解题思路</h3>
+<p>普通二叉树可用后序递归（1 + countNodes(left) + countNodes(right)）或层序迭代计数。利用完全二叉树性质：分别沿最左、最右求深度，若相等说明是满二叉树，直接返回 (2 &lt;&lt; leftDepth) - 1；否则递归左右孩子加 1。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(log n x log n)（利用完全二叉树性质），空间复杂度 O(log n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        if (root == nullptr) return 0;
+        TreeNode* left = root-&gt;left;
+        TreeNode* right = root-&gt;right;
+        int leftDepth = 0, rightDepth = 0;
+        while (left)  { left = left-&gt;left;  ++leftDepth; }   // 沿最左
+        while (right) { right = right-&gt;right; ++rightDepth; }// 沿最右
+        if (leftDepth == rightDepth) {       // 满二叉树：2^h - 1
+            return (2 &lt;&lt; leftDepth) - 1;
+        }
+        // 非满：递归左右子树（完全二叉树至少有一侧是满的）
+        return 1 + countNodes(root-&gt;left) + countNodes(root-&gt;right);
+    }
+};</code></pre></div>
+
+<h2>110. 平衡二叉树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/balanced-binary-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0110.平衡二叉树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1Ug411S7my" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定一个二叉树，判断它是否是高度平衡的二叉树。</p>
+<p>本题中，一棵高度平衡二叉树定义为：一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过1。</p>
+<p>二叉树节点的深度：指从根节点到该节点的最长简单路径边的条数；节点的高度：指从该节点到叶子节点的最长简单路径边的条数。求深度可以从上到下用前序遍历（中左右），而高度只能从下到上用后序遍历（左右中）。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [3,9,20,null,null,15,7]</td><td>输出：true</td></tr><tr><td>示例 2</td><td>输入：root = [1,2,2,3,3,null,null,4,4]</td><td>输出：false</td></tr><tr><td>示例 3</td><td>输入：root = []</td><td>输出：true</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中的节点数在范围 [0, 5000] 内</li><li>-10^4 &lt;= Node.val &lt;= 10^4</li></ul>
+<h3>解题思路</h3>
+<p>后序递归求高度：空节点返回 0；分别求左右子树高度，若任一侧返回 -1 直接返回 -1（剪枝）；若两侧高度差绝对值大于 1 返回 -1；否则返回 1 + max(左右高度)。返回 -1 标记该子树已不平衡。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈，最坏 O(n)）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    // 返回高度；不平衡返回 -1
+    int getHeight(TreeNode* node) {
+        if (node == nullptr) return 0;
+        int left = getHeight(node-&gt;left);
+        if (left == -1) return -1;
+        int right = getHeight(node-&gt;right);
+        if (right == -1) return -1;
+        if (abs(left - right) &gt; 1) return -1;   // 高度差超过 1
+        return 1 + max(left, right);
+    }
+    bool isBalanced(TreeNode* root) {
+        return getHeight(root) != -1;
+    }
+};</code></pre></div>
+
+<h2>257. 二叉树的所有路径</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/binary-tree-paths/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0257.二叉树的所有路径.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1ZG411G7Dh" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你一个二叉树的根节点 root ，按 任意顺序 ，返回所有从根节点到叶子节点的路径。说明: 叶子节点是指没有子节点的节点。</p>
+<p>题目要求根到叶子的路径，需要父节点先于孩子节点处理，因此采用前序遍历。回溯和递归是一一对应的，有一个递归，就要有一个回溯。</p>
+<p>终止条件不写 cur == NULL，而是当 cur 不为空且左右孩子都为空时，把当前路径放入结果集。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,2,3,null,5]</td><td>输出：["1-&gt;2-&gt;5","1-&gt;3"]</td></tr><tr><td>示例 2</td><td>输入：root = [1]</td><td>输出：["1"]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数目在范围 [1, 100] 内</li><li>-100 &lt;= Node.val &lt;= 100</li></ul>
+<h3>解题思路</h3>
+<p>前序递归 + 回溯：path 记录路径，递归进入左/右子树后立即 path.pop_back() 回退（显式回溯）；也可把参数写成 string path 传 path + "-&gt;"（隐式回溯，递归返回后原 path 未被修改）。遇到叶子节点把路径拼接箭头存入结果。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    vector&lt;string&gt; result;
+    void traversal(TreeNode* node, string path) {
+        path += to_string(node-&gt;val);
+        if (node-&gt;left == nullptr &amp;&amp; node-&gt;right == nullptr) {  // 叶子：收集
+            result.push_back(path);
+            return;
+        }
+        if (node-&gt;left) traversal(node-&gt;left, path + "-&gt;");
+        if (node-&gt;right) traversal(node-&gt;right, path + "-&gt;");
+    }
+    vector&lt;string&gt; binaryTreePaths(TreeNode* root) {
+        if (root == nullptr) return result;
+        traversal(root, "");
+        return result;
+    }
+};</code></pre></div>
+
+<h2>404. 左叶子之和</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/sum-of-left-leaves/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0404.左叶子之和.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1GY4y1K7z8" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定二叉树的根节点 root ，返回所有左叶子之和。</p>
+<p>节点A的左孩子不为空，且左孩子的左右孩子都为空（说明是叶子节点），那么A节点的左孩子为左叶子节点。</p>
+<p>判断当前节点是不是左叶子是无法判断的，必须要通过节点的父节点来判断其左孩子是不是左叶子。遍历顺序采用后序遍历（左右中），需要通过递归函数的返回值来累加求取左叶子数值之和。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [3,9,20,null,null,15,7]</td><td>输出：24</td></tr><tr><td>示例 2</td><td>输入：root = [1]</td><td>输出：0</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>节点数量在 1 到 1000 之间</li><li>节点值在 -1000 到 1000 之间</li></ul>
+<h3>解题思路</h3>
+<p>后序递归：空节点返回 0；递归求左子树的左叶子之和；若当前节点的左孩子是左叶子（左孩子不为空且左孩子左右孩子都为空），用该左叶子的值作为左子树结果；再递归求右子树的左叶子之和，两者相加返回。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        if (root == nullptr) return 0;
+        int sum = 0;
+        // 左孩子是叶子节点：加入其值
+        if (root-&gt;left != nullptr &amp;&amp; root-&gt;left-&gt;left == nullptr &amp;&amp; root-&gt;left-&gt;right == nullptr) {
+            sum += root-&gt;left-&gt;val;
+        }
+        sum += sumOfLeftLeaves(root-&gt;left);
+        sum += sumOfLeftLeaves(root-&gt;right);
+        return sum;
+    }
+};</code></pre></div>
+
+<h2>513. 找树左下角的值</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/find-bottom-left-tree-value/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0513.找树左下角的值.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1424y1Z7pn" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定一个二叉树的 根节点 root，请找出该二叉树的 最底层 最左边 节点的值。假设二叉树中至少有一个节点。</p>
+<p>本题要找出树的最后一行的最左边的值，用层序遍历非常简单，只需要记录最后一行第一个节点的数值就可以了。</p>
+<p>用递归法：深度最大的叶子节点一定是最后一行，使用前序遍历（保证优先左边搜索），记录深度最大的叶子节点。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [2,1,3]</td><td>输出：1</td></tr><tr><td>示例 2</td><td>输入：root = [1,2,3,4,null,5,6,null,null,7]</td><td>输出：7</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>二叉树的节点个数的范围是 [1, 10^4]</li><li>-2^31 &lt;= Node.val &lt;= 2^31 - 1</li></ul>
+<h3>解题思路</h3>
+<p>层序遍历：每次进入新一层时记录 i == 0 的节点值，遍历结束后 result 就是最后一行最左边的值。递归法：全局 maxDepth 记录最大深度，前序遍历优先左，遇到叶子节点比较并更新深度与最左值，depth++ 后回溯 depth--。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)（层序队列，最坏一层 n/2 量级）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    int maxDepth = -1;
+    int result = 0;
+    void traversal(TreeNode* node, int depth) {
+        if (node-&gt;left == nullptr &amp;&amp; node-&gt;right == nullptr) {
+            if (depth &gt; maxDepth) {          // 先左后右，最深的叶子即最左下角
+                maxDepth = depth;
+                result = node-&gt;val;
+            }
+            return;
+        }
+        if (node-&gt;left) traversal(node-&gt;left, depth + 1);
+        if (node-&gt;right) traversal(node-&gt;right, depth + 1);
+    }
+    int findBottomLeftValue(TreeNode* root) {
+        traversal(root, 0);
+        return result;
+    }
+};</code></pre></div>
+
+<h2>112. 路径总和</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/path-sum/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0112.路径总和.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV19t4y1L7CR" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你二叉树的根节点 root 和一个表示目标和的整数 targetSum 。判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。如果存在，返回 true ；否则，返回 false 。叶子节点 是指没有子节点的节点。</p>
+<p>本题前中后序都可以，无所谓，因为中节点也没有处理逻辑。计数器 count 初始为目标和，然后每次减去遍历路径节点上的数值，最后 count == 0 同时到了叶子节点说明找到了目标和。</p>
+<p>如果要搜索其中一条符合条件的路径，那么递归一定需要返回值，因为遇到符合条件的路径了就要及时返回。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22</td><td>输出：true</td></tr><tr><td>示例 2</td><td>输入：root = [1,2,3], targetSum = 5</td><td>输出：false</td></tr><tr><td>示例 3</td><td>输入：root = [], targetSum = 0</td><td>输出：false</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点的数目在范围 [0, 5000] 内</li><li>-1000 &lt;= Node.val &lt;= 1000</li><li>-1000 &lt;= targetSum &lt;= 1000</li></ul>
+<h3>解题思路</h3>
+<p>递归返回 bool：终止条件为叶子节点时判断 count 是否为 0；单层逻辑空节点不进入递归，用 count - 子节点值 作为参数传给子递归（隐藏式回溯，函数结束 count 数值不变），若某侧返回 true 立刻返回 true。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    bool traversal(TreeNode* node, int targetSum) {
+        if (node-&gt;left == nullptr &amp;&amp; node-&gt;right == nullptr) {   // 叶子
+            return targetSum == node-&gt;val;                       // 减到 0 说明找到
+        }
+        if (node-&gt;left &amp;&amp; traversal(node-&gt;left, targetSum - node-&gt;val)) return true;
+        if (node-&gt;right &amp;&amp; traversal(node-&gt;right, targetSum - node-&gt;val)) return true;
+        return false;
+    }
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if (root == nullptr) return false;
+        return traversal(root, targetSum);
+    }
+};</code></pre></div>
+
+<h2>113. 路径总和 II</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/path-sum-ii/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0112.路径总和.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。叶子节点 是指没有子节点的节点。</p>
+<p>如果需要搜索整棵二叉树且不用处理递归返回值，递归函数就不要返回值（本题要遍历整棵树找出所有满足条件的路径）。</p>
+<p>需要回溯：递归返回后把节点从路径中弹出（撤销处理结果），才能继续寻找下一条路径。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22</td><td>输出：[[5,4,11,2],[5,8,4,5]]</td></tr><tr><td>示例 2</td><td>输入：root = [1,2,3], targetSum = 5</td><td>输出：[]</td></tr><tr><td>示例 3</td><td>输入：root = [1,2], targetSum = 0</td><td>输出：[]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点总数在范围 [0, 5000] 内</li><li>-1000 &lt;= Node.val &lt;= 1000</li><li>-1000 &lt;= targetSum &lt;= 1000</li></ul>
+<h3>解题思路</h3>
+<p>递归无返回值遍历整棵树：count 初始为目标和递减，遇到叶子节点且 count == 0 时把 path 拷贝入结果集；递归进入左/右子树后需要显式回溯（path.pop_back()，count 恢复），保证一条路径记录完成后能继续找下一条。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    vector&lt;vector&lt;int&gt;&gt; result;
+    vector&lt;int&gt; path;
+    void traversal(TreeNode* node, int count) {
+        if (node-&gt;left == nullptr &amp;&amp; node-&gt;right == nullptr &amp;&amp; count == 0) {
+            result.push_back(path);          // 叶子且和满足
+            return;
+        }
+        if (node-&gt;left == nullptr &amp;&amp; node-&gt;right == nullptr) return;
+        if (node-&gt;left) {
+            path.push_back(node-&gt;left-&gt;val);
+            traversal(node-&gt;left, count - node-&gt;left-&gt;val);
+            path.pop_back();                 // 回溯
+        }
+        if (node-&gt;right) {
+            path.push_back(node-&gt;right-&gt;val);
+            traversal(node-&gt;right, count - node-&gt;right-&gt;val);
+            path.pop_back();
+        }
+    }
+    vector&lt;vector&lt;int&gt;&gt; pathSum(TreeNode* root, int targetSum) {
+        if (root == nullptr) return result;
+        path.push_back(root-&gt;val);
+        traversal(root, targetSum - root-&gt;val);
+        return result;
+    }
+};</code></pre></div>
+
+<h1>三、二叉树的修改与构造</h1>
+
+<h2>226. 翻转二叉树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/invert-binary-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0226.翻转二叉树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1sP4y1f7q7" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。</p>
+<p>翻转一棵二叉树，其实就是把每一个节点的左右孩子交换一下。前序遍历、后序遍历都可以，层序遍历也可以；中序遍历不方便，因为会把某些节点的左右孩子翻转了两次。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [4,2,7,1,3,6,9]</td><td>输出：[4,7,2,9,6,3,1]</td></tr><tr><td>示例 2</td><td>输入：root = [2,1,3]</td><td>输出：[2,3,1]</td></tr><tr><td>示例 3</td><td>输入：root = []</td><td>输出：[]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数目范围在 [0, 100] 内</li><li>-100 &lt;= Node.val &lt;= 100</li></ul>
+<h3>解题思路</h3>
+<p>递归前序：按递归三部曲，先交换当前节点的左右孩子，再递归处理左右子树；后序、层序（队列）也可。迭代法用栈模拟前序遍历，出栈时交换左右孩子。关键是想清楚用哪种遍历顺序。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（h 为树高，最坏 O(n)）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if (root == nullptr) return root;
+        swap(root-&gt;left, root-&gt;right);         // 中：交换左右孩子
+        invertTree(root-&gt;left);                // 左
+        invertTree(root-&gt;right);               // 右
+        return root;
+    }
+};</code></pre></div>
+
+<h2>106. 从中序与后序遍历序列构造二叉树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0106.从中序与后序遍历序列构造二叉树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1vW4y1i7dn" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>根据一棵树的中序遍历与后序遍历构造二叉树。注意: 你可以假设树中没有重复的元素。</p>
+<p>以后序数组的最后一个元素为切割点，先切中序数组，根据中序数组，反过来再切后序数组。</p>
+<p>切割时要坚持左闭右开的区间不变量，否则边界值容易混乱。前序 + 中序可以唯一确定一棵二叉树；后序 + 中序可以唯一确定一棵二叉树；前序 + 后序不能唯一确定一棵二叉树。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]</td><td>输出：[3,9,20,null,null,15,7]</td></tr><tr><td>示例 2</td><td>输入：inorder = [-1], postorder = [-1]</td><td>输出：[-1]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>1 &lt;= inorder.length &lt;= 3000</li><li>postorder.length == inorder.length</li><li>-3000 &lt;= inorder[i], postorder[i] &lt;= 3000</li><li>inorder 和 postorder 都由 不同 的值组成</li><li>postorder 中每一个值都在 inorder 中</li><li>inorder 保证是树的中序遍历</li><li>postorder 保证是树的后序遍历</li></ul>
+<h3>解题思路</h3>
+<p>递归构造：后序数组大小为 0 返回空；取后序数组最后一个元素为根节点；在中序数组中找到根节点位置作为切割点，先切中序（左闭右开），再按左中序大小切后序（舍弃最后一个元素）；递归构建左右子树。用哈希表记录中序位置可优化查找。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)（哈希表优化，否则 O(n^2)），空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* traversal(vector&lt;int&gt;&amp; inorder, vector&lt;int&gt;&amp; postorder) {
+        if (postorder.empty()) return nullptr;
+        int rootVal = postorder.back();              // 后序最后一个元素是根
+        TreeNode* root = new TreeNode(rootVal);
+        if (postorder.size() == 1) return root;
+        // 在中序中找切割点
+        int delimiterIndex = 0;
+        for (int i = 0; i &lt; inorder.size(); ++i) {
+            if (inorder[i] == rootVal) { delimiterIndex = i; break; }
+        }
+        // 左闭右开切割中序
+        vector&lt;int&gt; leftInorder(inorder.begin(), inorder.begin() + delimiterIndex);
+        vector&lt;int&gt; rightInorder(inorder.begin() + delimiterIndex + 1, inorder.end());
+        // 后序与中序左区间等长
+        vector&lt;int&gt; leftPostorder(postorder.begin(), postorder.begin() + leftInorder.size());
+        vector&lt;int&gt; rightPostorder(postorder.begin() + leftInorder.size(), postorder.end() - 1);
+        root-&gt;left = traversal(leftInorder, leftPostorder);
+        root-&gt;right = traversal(rightInorder, rightPostorder);
+        return root;
+    }
+    TreeNode* buildTree(vector&lt;int&gt;&amp; inorder, vector&lt;int&gt;&amp; postorder) {
+        return traversal(inorder, postorder);
+    }
+};</code></pre></div>
+
+<h2>105. 从前序与中序遍历序列构造二叉树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0106.从中序与后序遍历序列构造二叉树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 无公开课视频</p>
+<h3>题目描述</h3>
+<p>给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。</p>
+<p>思路与 106 题一致：以先序数组的第一个元素为根节点，在中序数组中找到根节点位置作为切割点，先切中序数组，再按左中序大小切先序数组，递归构造左右子树。</p>
+<p>注：本题题解页 https://programmercarl.com/0105.从前序与中序遍历序列构造二叉树.html 已 404，解题思路参考 106 题（从中序与后序遍历序列构造二叉树）的题解页。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]</td><td>输出：[3,9,20,null,null,15,7]</td></tr><tr><td>示例 2</td><td>输入：preorder = [-1], inorder = [-1]</td><td>输出：[-1]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>1 &lt;= preorder.length &lt;= 3000</li><li>inorder.length == preorder.length</li><li>-3000 &lt;= preorder[i], inorder[i] &lt;= 3000</li><li>preorder 和 inorder 均 无重复 元素</li><li>inorder 均出现在 preorder</li><li>preorder 保证 为二叉树的前序遍历序列</li><li>inorder 保证 为二叉树的中序遍历序列</li></ul>
+<h3>解题思路</h3>
+<p>递归构造：先序数组大小为 0 返回空；取先序数组第一个元素为根节点；在中序数组中找到根节点位置作为切割点，先切中序（左闭右开），再按左中序大小切先序数组（舍弃第一个元素）；递归构建左右子树。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)（哈希表优化，否则 O(n^2)），空间复杂度 O(n)</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* traversal(vector&lt;int&gt;&amp; preorder, vector&lt;int&gt;&amp; inorder) {
+        if (preorder.empty()) return nullptr;
+        int rootVal = preorder[0];                   // 前序第一个元素是根
+        TreeNode* root = new TreeNode(rootVal);
+        if (preorder.size() == 1) return root;
+        // 在中序中找切割点
+        int delimiterIndex = 0;
+        for (int i = 0; i &lt; inorder.size(); ++i) {
+            if (inorder[i] == rootVal) { delimiterIndex = i; break; }
+        }
+        // 左闭右开切割中序
+        vector&lt;int&gt; leftInorder(inorder.begin(), inorder.begin() + delimiterIndex);
+        vector&lt;int&gt; rightInorder(inorder.begin() + delimiterIndex + 1, inorder.end());
+        // 前序除根外，与中序左区间等长
+        vector&lt;int&gt; leftPreorder(preorder.begin() + 1, preorder.begin() + 1 + leftInorder.size());
+        vector&lt;int&gt; rightPreorder(preorder.begin() + 1 + leftInorder.size(), preorder.end());
+        root-&gt;left = traversal(leftPreorder, leftInorder);
+        root-&gt;right = traversal(rightPreorder, rightInorder);
+        return root;
+    }
+    TreeNode* buildTree(vector&lt;int&gt;&amp; preorder, vector&lt;int&gt;&amp; inorder) {
+        return traversal(preorder, inorder);
+    }
+};</code></pre></div>
+
+<h2>654. 最大二叉树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/maximum-binary-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0654.最大二叉树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1MG411G7ox" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定一个不含重复元素的整数数组 nums 。一个以此数组构建的最大二叉树定义如下：二叉树的根是数组中的最大元素；左子树是通过数组中最大值左边部分构造出的最大二叉树；右子树是通过数组中最大值右边部分构造出的最大二叉树。</p>
+<p>通过给定的数组构建最大二叉树，并且输出这个树的根节点。</p>
+<p>构造树一般采用的是前序遍历，因为先构造中间节点，然后递归构造左子树和右子树。每次分隔尽量不要定义新的数组，而是通过下标索引直接在原数组上操作（左闭右开区间）。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：nums = [3,2,1,6,0,5]</td><td>输出：[6,3,5,null,2,0,null,null,1]</td></tr><tr><td>示例 2</td><td>输入：nums = [3,2,1]</td><td>输出：[3,null,2,null,1]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>1 &lt;= nums.length &lt;= 1000</li><li>0 &lt;= nums[i] &lt;= 1000</li><li>nums 中的所有整数互不相同</li></ul>
+<h3>解题思路</h3>
+<p>前序递归构造：终止条件为数组大小为 1 时直接创建节点返回；单层逻辑找到当前区间最大值及其下标，用最大值创建根节点，最大值左侧部分递归构造左子树，右侧部分递归构造右子树。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n^2)（每次线性找最大值，最坏情况），空间复杂度 O(n)（递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    // 在 [left, right) 区间内构造最大二叉树
+    TreeNode* traversal(vector&lt;int&gt;&amp; nums, int left, int right) {
+        if (left &gt;= right) return nullptr;
+        int maxIndex = left;                         // 找区间内最大值
+        for (int i = left + 1; i &lt; right; ++i) {
+            if (nums[i] &gt; nums[maxIndex]) maxIndex = i;
+        }
+        TreeNode* root = new TreeNode(nums[maxIndex]);
+        root-&gt;left = traversal(nums, left, maxIndex);
+        root-&gt;right = traversal(nums, maxIndex + 1, right);
+        return root;
+    }
+    TreeNode* constructMaximumBinaryTree(vector&lt;int&gt;&amp; nums) {
+        return traversal(nums, 0, nums.size());
+    }
+};</code></pre></div>
+
+<h2>617. 合并二叉树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/merge-two-binary-trees/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0617.合并二叉树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1m14y1Y7JK" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定两个二叉树，想象当你将它们中的一个覆盖到另一个上时，两个二叉树的一些节点便会重叠。你需要将他们合并为一个新的二叉树。合并的规则是如果两个节点重叠，那么将他们的值相加作为节点合并后的新值，否则不为 NULL 的节点将直接作为新二叉树的节点。</p>
+<p>注意: 合并必须从两个树的根节点开始。</p>
+<p>和遍历一个树逻辑是一样的，只不过传入两个树的节点，同时操作。终止条件：如果 t1 == NULL 了，合并就应该是 t2；反过来如果 t2 == NULL，合并就是 t1。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root1 = [1,3,2,5], root2 = [2,1,3,null,4,null,7]</td><td>输出：[3,4,5,5,4,null,7]</td></tr><tr><td>示例 2</td><td>输入：root1 = [1], root2 = [1,2]</td><td>输出：[2,2]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>两棵树中的节点数目在范围 [0, 2000] 内</li><li>-10^4 &lt;= Node.val &lt;= 10^4</li></ul>
+<h3>解题思路</h3>
+<p>前序递归同时操作两棵树：t1 为空返回 t2，t2 为空返回 t1；单层逻辑把两棵树的元素相加（复用 t1 作为合并后根节点），再递归合并左子树、右子树。迭代法用队列同时放入两树对应节点，类似层序模拟。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+        if (root1 == nullptr) return root2;          // 一方为空，直接返回另一方
+        if (root2 == nullptr) return root1;
+        root1-&gt;val += root2-&gt;val;                    // 重合节点值相加
+        root1-&gt;left = mergeTrees(root1-&gt;left, root2-&gt;left);
+        root1-&gt;right = mergeTrees(root1-&gt;right, root2-&gt;right);
+        return root1;
+    }
+};</code></pre></div>
+
+<h1>四、求二叉搜索树的属性</h1>
+
+<h2>700. 二叉搜索树中的搜索</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/search-in-a-binary-search-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0700.二叉搜索树中的搜索.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1wG411g7sF" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定二叉搜索树（BST）的根节点 root 和一个整数值 val。你需要在 BST 中找到节点值等于 val 的节点。 返回以该节点为根的子树。 如果节点不存在，则返回 NULL 。</p>
+<p>二叉搜索树是有序树：左子树上所有结点的值均小于它的根结点的值，右子树上所有结点的值均大于它的根结点的值，且左右子树也都满足二叉搜索树性质。</p>
+<p>递归函数有返回值，必须用变量接住，否则返回值就没了。由于二叉搜索树的特殊性（节点的有序性），可以不使用辅助栈或者队列就可以写出迭代法。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [4,2,7,1,3], val = 2</td><td>输出：[2,1,3]</td></tr><tr><td>示例 2</td><td>输入：root = [4,2,7,1,3], val = 5</td><td>输出：[]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数在 [1, 5000] 范围内</li><li>1 &lt;= Node.val &lt;= 10^7</li><li>root 是二叉搜索树</li><li>1 &lt;= val &lt;= 10^7</li></ul>
+<h3>解题思路</h3>
+<p>递归：终止条件为节点为空或值相等返回当前节点；单层逻辑按 root-&gt;val 与 val 的大小关系决定向左子树或右子树递归。迭代：直接 while 循环比较大小移动 root，搜索方向由有序性决定，不需要回溯。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(h)（h 为树高），空间复杂度 O(h)（递归）/ O(1)（迭代）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        if (root == nullptr || root-&gt;val == val) return root;
+        if (val &lt; root-&gt;val) return searchBST(root-&gt;left, val);   // 去左子树找
+        return searchBST(root-&gt;right, val);                       // 去右子树找
+    }
+};</code></pre></div>
+
+<h2>98. 验证二叉搜索树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/validate-binary-search-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0098.验证二叉搜索树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV18P411n7Q4" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。</p>
+<p>有效二叉搜索树定义如下：节点的左子树只包含小于当前节点的数。节点的右子树只包含大于当前节点的数。所有左子树和右子树自身必须也是二叉搜索树。</p>
+<p>中序遍历下，输出的二叉搜索树节点的数值是有序序列，因此验证 BST 等价于判断中序序列是否严格递增。要比较的是左子树所有节点小于中间节点，右子树所有节点大于中间节点，不能只比较左节点小于中间节点、右节点大于中间节点（反例：[10,5,15,null,null,6,20]）。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [2,1,3]</td><td>输出：true</td></tr><tr><td>示例 2</td><td>输入：root = [5,1,4,null,null,3,6]</td><td>输出：false</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数在范围 [1, 10^4] 内</li><li>-2^31 &lt;= Node.val &lt;= 2^31 - 1</li></ul>
+<h3>解题思路</h3>
+<p>中序遍历判断递增：可中序存数组后检查 vec[i] &lt;= vec[i-1] 返回 false，或遍历中直接判断。注意陷阱：1. 不能只比较左右子节点，要比较整个左/右子树；2. 样例最小节点可能是 int 最小值，比较值要用 long long 最小值（LONG_MIN）；3. 避免初始化最小值，改用 pre 指针记录前一个节点（取到最左面节点数值来比较）。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈，最坏 O(n)）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* pre = nullptr;                     // 中序遍历的前一个节点
+    bool isValidBST(TreeNode* root) {
+        if (root == nullptr) return true;
+        if (!isValidBST(root-&gt;left)) return false;      // 左
+        if (pre != nullptr &amp;&amp; pre-&gt;val &gt;= root-&gt;val) return false;  // 中：必须严格递增
+        pre = root;
+        return isValidBST(root-&gt;right);                 // 右
+    }
+};</code></pre></div>
+
+<h2>530. 二叉搜索树的最小绝对差</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/minimum-absolute-difference-in-bst/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0530.二叉搜索树的最小绝对差.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1DD4y11779" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你一棵所有节点为非负值的二叉搜索树，请你计算树中任意两节点的差的绝对值的最小值。</p>
+<p>二叉搜索树采用中序遍历，其实就是一个有序数组，在二叉搜索树上求最值、差值之类的可以想象成在有序数组上求最值、求差值。</p>
+<p>有序数组上最小差值只可能来自相邻两数，对应到树上即中序遍历时的前后节点。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [4,2,6,1,3]</td><td>输出：1</td></tr><tr><td>示例 2</td><td>输入：root = [1,0,48,null,null,12,49]</td><td>输出：1</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数目范围是 [2, 10^4]</li><li>节点值的范围是 [0, 10^5]</li><li>本题与 783 题相同</li></ul>
+<h3>解题思路</h3>
+<p>中序遍历即有序数组，最小差值只可能来自中序遍历中的相邻节点。用双指针 pre 与 cur：递归中需要用一个 pre 节点记录 cur 节点的前一个节点，每次在中序位置用 cur-&gt;val - pre-&gt;val 更新最小值，再执行 pre = cur。迭代法用栈模拟中序遍历同样维护 pre/cur。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* pre = nullptr;
+    int result = INT_MAX;
+    void traversal(TreeNode* node) {
+        if (node == nullptr) return;
+        traversal(node-&gt;left);                    // 左
+        if (pre != nullptr) {                     // 中：相邻节点差
+            result = min(result, node-&gt;val - pre-&gt;val);
+        }
+        pre = node;
+        traversal(node-&gt;right);                   // 右
+    }
+    int getMinimumDifference(TreeNode* root) {
+        traversal(root);
+        return result;
+    }
+};</code></pre></div>
+
+<h2>501. 二叉搜索树中的众数</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/find-mode-in-binary-search-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0501.二叉搜索树中的众数.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1fD4y117gp" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你一个含重复值的二叉搜索树（BST）的根节点 root ，找出并返回 BST 中的所有 众数（即，出现频率最高的元素）。如果树中有不止一个众数，可以按 任意顺序 返回。</p>
+<p>BST 定义：结点左子树中所含节点的值 小于等于 当前节点的值，结点右子树中所含节点的值 大于等于 当前节点的值，左子树和右子树都是二叉搜索树。</p>
+<p>进阶：你可以不使用额外的空间吗？（假设由递归产生的隐式调用栈的开销不被计算在内）</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,null,2,2]</td><td>输出：[2]</td></tr><tr><td>示例 2</td><td>输入：root = [0]</td><td>输出：[0]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点的数目在范围 [1, 10^4] 内</li><li>-10^5 &lt;= Node.val &lt;= 10^5</li><li>进阶：你可以不使用额外的空间吗？（假设由递归产生的隐式调用栈的开销不被计算在内）</li></ul>
+<h3>解题思路</h3>
+<p>非 BST 做法：遍历整棵树用 map 统计频率再排序取最高频。BST 做法：中序遍历就是有序的，相邻节点比较即可统计频率。用 pre 与 cur 双指针：相等则 count++，否则 count 重置为 1；若 count == maxCount 把当前值加入结果集，若 count &gt; maxCount 更新最大频率并清空结果集。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈；满足进阶要求可不使用额外空间）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* pre = nullptr;
+    int count = 0;
+    int maxCount = 0;
+    vector&lt;int&gt; result;
+    void traversal(TreeNode* node) {
+        if (node == nullptr) return;
+        traversal(node-&gt;left);                    // 左
+        if (pre == nullptr) count = 1;            // 中：统计连续相同值
+        else if (pre-&gt;val == node-&gt;val) ++count;
+        else count = 1;
+        pre = node;
+        if (count == maxCount) result.push_back(node-&gt;val);   // 平票也收
+        if (count &gt; maxCount) {                               // 刷新众数
+            maxCount = count;
+            result.clear();
+            result.push_back(node-&gt;val);
+        }
+        traversal(node-&gt;right);                   // 右
+    }
+    vector&lt;int&gt; findMode(TreeNode* root) {
+        traversal(root);
+        return result;
+    }
+};</code></pre></div>
+
+<h1>五、公共祖先问题</h1>
+
+<h2>236. 二叉树的最近公共祖先</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0236.二叉树的最近公共祖先.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1jd4y1B7E2" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。</p>
+<p>百度百科中最近公共祖先的定义为：对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。</p>
+<p>后序遍历（左右中）就是天然的回溯过程，可以实现自底向上查找公共祖先。递归函数返回值用来表示是否找到了 p 或 q，同时也用来携带最近公共祖先的结果。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1</td><td>输出：3</td></tr><tr><td>示例 2</td><td>输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4</td><td>输出：5</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数目在范围 [2, 10^5] 内</li><li>-10^9 &lt;= Node.val &lt;= 10^9</li><li>所有 Node.val 互不相同</li><li>p != q</li><li>p 和 q 均存在于给定的二叉树中</li></ul>
+<h3>解题思路</h3>
+<p>后序递归：终止条件为节点为空返回空、节点等于 p 或 q 直接返回该节点；单层逻辑递归左子树得 left、递归右子树得 right，若 left 和 right 都不为空说明 p、q 分别在当前节点左右子树，当前节点即最近公共祖先；left 为空返回 right，right 为空返回 left，都为空返回空。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root == nullptr || root == p || root == q) return root;
+        TreeNode* left = lowestCommonAncestor(root-&gt;left, p, q);   // 后序：自底向上
+        TreeNode* right = lowestCommonAncestor(root-&gt;right, p, q);
+        if (left != nullptr &amp;&amp; right != nullptr) return root;      // 左右各找到一个
+        if (left == nullptr) return right;                         // 都在右侧
+        return left;                                               // 都在左侧
+    }
+};</code></pre></div>
+
+<h2>235. 二叉搜索树的最近公共祖先</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0235.二叉搜索树的最近公共祖先.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1Zt4y1F7ww" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。</p>
+<p>百度百科中最近公共祖先的定义为：对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。</p>
+<p>第一次遇到 cur 节点是数值在 [p, q] 区间中，那么 cur 就是 q 和 p 的最近公共祖先。本题不涉及前中后序（没有中节点的处理逻辑，遍历顺序无所谓），属于搜索一条边的写法，找到结果后直接返回。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8</td><td>输出：6</td></tr><tr><td>示例 2</td><td>输入：root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4</td><td>输出：2</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点的数目在范围 [2, 10^5] 内</li><li>-10^9 &lt;= Node.val &lt;= 10^9</li><li>所有节点的值都是唯一的</li><li>p、q 为不同节点且均存在于给定的二叉搜索树中</li></ul>
+<h3>解题思路</h3>
+<p>利用 BST 有序性：从根节点自上而下，若当前节点值同时大于 p 和 q 则目标在左子树，同时小于 p 和 q 则目标在右子树；第一次遇到节点值落在 [p, q] 区间中，该节点就是最近公共祖先。迭代法按条件向左或向右移动即可。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(h)（h 为树高），空间复杂度 O(h)（递归）/ O(1)（迭代）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        while (root) {                       // 利用 BST 有序性迭代
+            if (root-&gt;val &gt; p-&gt;val &amp;&amp; root-&gt;val &gt; q-&gt;val) {
+                root = root-&gt;left;           // 都比根小，去左子树
+            } else if (root-&gt;val &lt; p-&gt;val &amp;&amp; root-&gt;val &lt; q-&gt;val) {
+                root = root-&gt;right;          // 都比根大，去右子树
+            } else {
+                return root;                 // 一左一右（或等于某个），根即祖先
+            }
+        }
+        return nullptr;
+    }
+};</code></pre></div>
+
+<h1>六、二叉搜索树的修改与构造</h1>
+
+<h2>701. 二叉搜索树中的插入操作</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/insert-into-a-binary-search-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0701.二叉搜索树中的插入操作.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1Et4y1c78Y" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定二叉搜索树（BST）的根节点 root 和要插入树中的值 value ，将值插入二叉搜索树。 返回插入后二叉搜索树的根节点。 输入数据 保证 ，新值和原始二叉搜索树中的任意节点值都不同。</p>
+<p>注意，可能存在多种有效的插入方式，只要树在插入后仍保持为二叉搜索树即可。 你可以返回 任意有效的结果 。</p>
+<p>只要按照二叉搜索树的规则去遍历，遇到空节点就插入节点就可以了，不需要重构。利用递归返回值，下一层把新节点返回，本层用 root-&gt;left / root-&gt;right 接住。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [4,2,7,1,3], val = 5</td><td>输出：[4,2,7,1,3,5]</td></tr><tr><td>示例 2</td><td>输入：root = [40,20,60,10,30,50,70], val = 25</td><td>输出：[40,20,60,10,30,50,70,null,null,25]</td></tr><tr><td>示例 3</td><td>输入：root = [4,2,7,1,3,null,null,null,null,null,null], val = 5</td><td>输出：[4,2,7,1,3,5]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中的节点数将在 [0, 10^4] 的范围内</li><li>每个节点都有一个唯一整数值，取值范围从 0 到 10^8</li><li>val 在 [-10^8, 10^8] 范围内</li><li>题目保证 val 在原始 BST 中不存在</li></ul>
+<h3>解题思路</h3>
+<p>递归：终止条件为遇到空节点时创建新节点并返回；单层逻辑按 BST 大小关系决定向左或向右递归，本层用 root-&gt;left / root-&gt;right 接住下层返回的节点（利用返回值完成新节点与其父节点的赋值）。迭代法需记录当前遍历节点的父节点，找到空位后由父节点接上新节点。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(h)（h 为树高），空间复杂度 O(h)（递归）/ O(1)（迭代）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+        if (root == nullptr) return new TreeNode(val);   // 找到插入位置
+        if (val &lt; root-&gt;val) root-&gt;left = insertIntoBST(root-&gt;left, val);
+        else root-&gt;right = insertIntoBST(root-&gt;right, val);
+        return root;
+    }
+};</code></pre></div>
+
+<h2>450. 删除二叉搜索树中的节点</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/delete-node-in-a-bst/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0450.删除二叉搜索树中的节点.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1tP41177us" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的 key 对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。</p>
+<p>一般来说，删除节点可分为两个步骤：首先找到需要删除的节点；如果找到了，删除它。说明：要求算法时间复杂度为 O(h)，h 为树的高度。</p>
+<p>找到要删除的节点后有五种情况：1. 没找到删除的节点，遍历到空节点直接返回；2. 左右孩子都为空（叶子节点），直接删除返回 NULL；3. 左孩子为空右孩子不为空，右孩子补位；4. 右孩子为空左孩子不为空，左孩子补位；5. 左右孩子都不为空，将删除节点的左子树头结点放到删除节点的右子树的最左面节点的左孩子上，返回删除节点右孩子为新的根节点。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [5,3,6,2,4,null,7], key = 3</td><td>输出：[5,4,6,2,null,null,7]（另一个正确答案 [5,2,6,null,4,null,7]）</td></tr><tr><td>示例 2</td><td>输入：root = [5,3,6,2,4,null,7], key = 0</td><td>输出：[5,3,6,2,4,null,7]</td></tr><tr><td>示例 3</td><td>输入：root = [], key = 0</td><td>输出：[]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>节点数量范围 [0, 10^4]</li><li>-10^5 &lt;= Node.val &lt;= 10^5</li><li>节点值唯一</li><li>root 是合法二叉搜索树</li><li>-10^5 &lt;= key &lt;= 10^5</li><li>进阶：时间复杂度 O(h)，h 为树的高度</li></ul>
+<h3>解题思路</h3>
+<p>递归利用返回值删除节点：终止条件为遇到空节点直接返回（说明没找到）；找到后分五种情况处理，其中第五种（左右孩子都不为空）最关键：把删除节点的左孩子放到其右子树最左面节点的左孩子上，返回删除节点右孩子为新根；上层用 root-&gt;left / root-&gt;right 接住返回值。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(h)（h 为树的高度），空间复杂度 O(h)（递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if (root == nullptr) return nullptr;                    // 未找到
+        if (root-&gt;val == key) {
+            // 情况 1：叶子节点，直接删除
+            if (root-&gt;left == nullptr &amp;&amp; root-&gt;right == nullptr) return nullptr;
+            // 情况 2：左空右不空，右孩子顶上
+            if (root-&gt;left == nullptr) return root-&gt;right;
+            // 情况 3：右空左不空，左孩子顶上
+            if (root-&gt;right == nullptr) return root-&gt;left;
+            // 情况 4：左右都不空，左子树接到右子树最左节点下面
+            TreeNode* cur = root-&gt;right;
+            while (cur-&gt;left != nullptr) cur = cur-&gt;left;
+            cur-&gt;left = root-&gt;left;
+            return root-&gt;right;
+        }
+        if (key &lt; root-&gt;val) root-&gt;left = deleteNode(root-&gt;left, key);
+        else root-&gt;right = deleteNode(root-&gt;right, key);
+        return root;
+    }
+};</code></pre></div>
+
+<h2>669. 修剪二叉搜索树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/trim-a-binary-search-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0669.修剪二叉搜索树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV17P41177ud" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你二叉搜索树的根节点 root ，同时给定最小边界 low 和最大边界 high。通过修剪二叉搜索树，使得所有节点的值在 [low, high] 中。修剪树 不应该 改变保留在树中的元素的相对结构（即，如果没有被移除，原有的父代子代关系都应当保留）。 可以证明，存在 唯一的答案 。所以结果应当返回修剪好的二叉搜索树的新的根节点。注意，根节点可能会根据给定的边界发生改变。</p>
+<p>不能遇到 root-&gt;val &lt; low 或 root-&gt;val &gt; high 就直接返回 null，因为被删节点可能还带着合法的子树（例如节点 0 不在区间内但它的右孩子 2 合法，需要把 2 接到父节点的左孩子位置）。</p>
+<p>单层逻辑：若 root-&gt;val &lt; low，递归处理右子树并返回右子树中符合条件的头结点；若 root-&gt;val &gt; high，递归处理左子树；否则当前节点在区间内，令 root-&gt;left、root-&gt;right 分别接入左右子树修剪结果，返回 root。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [1,0,2], low = 1, high = 2</td><td>输出：[1,null,2]</td></tr><tr><td>示例 2</td><td>输入：root = [3,0,4,null,2,null,null,1], low = 1, high = 3</td><td>输出：[3,2,null,1]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中节点数在 [1, 10^4] 内</li><li>0 &lt;= Node.val &lt;= 10^4</li><li>root 中每个值都 独一无二</li><li>root 是合法的二叉搜索树</li><li>0 &lt;= low &lt;= high &lt;= 10^4</li></ul>
+<h3>解题思路</h3>
+<p>递归修剪：终止条件为遇空节点返回空；单层逻辑中节点值小于 low 时相当于把该节点的右孩子返回给上一层（其左子树值更小全部舍弃），大于 high 时返回左孩子；节点在区间内则分别修剪左右子树并用 root-&gt;left / root-&gt;right 接住。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(h)（递归栈，最坏 O(n)）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    TreeNode* trimBST(TreeNode* root, int low, int high) {
+        if (root == nullptr) return nullptr;
+        if (root-&gt;val &lt; low) return trimBST(root-&gt;right, low, high);   // 左子树全舍
+        if (root-&gt;val &gt; high) return trimBST(root-&gt;left, low, high);   // 右子树全舍
+        root-&gt;left = trimBST(root-&gt;left, low, high);   // 保留的节点继续修剪
+        root-&gt;right = trimBST(root-&gt;right, low, high);
+        return root;
+    }
+};</code></pre></div>
+
+<h2>108. 将有序数组转换为二叉搜索树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0108.将有序数组转换为二叉搜索树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1uR4y1X7qL" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。</p>
+<p>本质就是寻找分割点，分割点作为当前节点，然后递归左区间和右区间；有序数组的分割点就是数组中间位置元素。</p>
+<p>构造顺序符合前序遍历（根 → 左 → 右）。数组长度为偶数时中间有两个节点，取哪一个都可以，答案不唯一。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：nums = [-10,-3,0,5,9]</td><td>输出：[0,-3,9,-10,null,5]（答案不唯一）</td></tr><tr><td>示例 2</td><td>输入：nums = [1,3]</td><td>输出：[3,1]（或 [1,null,3]，答案不唯一）</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>1 &lt;= nums.length &lt;= 10^4</li><li>-10^4 &lt;= nums[i] &lt;= 10^4</li><li>nums 按 严格递增 顺序排列</li></ul>
+<h3>解题思路</h3>
+<p>递归二分构造：传入数组与左右下标，坚持左闭右闭区间，left &gt; right 返回空；mid = left + ((right - left) / 2) 取中间位置（防止数值越界），以 nums[mid] 构造根节点，递归构造左区间 [left, mid-1] 和右区间 [mid+1, right]。迭代法可用三个队列模拟分割过程。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(log n)（平衡树递归栈）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    // 在 [left, right) 区间构造平衡 BST
+    TreeNode* traversal(vector&lt;int&gt;&amp; nums, int left, int right) {
+        if (left &gt;= right) return nullptr;
+        int mid = left + (right - left) / 2;         // 取中间元素做根，防溢出
+        TreeNode* root = new TreeNode(nums[mid]);
+        root-&gt;left = traversal(nums, left, mid);
+        root-&gt;right = traversal(nums, mid + 1, right);
+        return root;
+    }
+    TreeNode* sortedArrayToBST(vector&lt;int&gt;&amp; nums) {
+        return traversal(nums, 0, nums.size());
+    }
+};</code></pre></div>
+
+<h2>538. 把二叉搜索树转换为累加树</h2>
+<p>🔗 <a href="https://leetcode.cn/problems/convert-bst-to-greater-tree/" target="_blank" rel="noopener">LeetCode 题目页</a> ｜ 📖 <a href="https://programmercarl.com/0538.把二叉搜索树转换为累加树.html" target="_blank" rel="noopener">代码随想录题解</a> ｜ 🎬 <a href="https://www.bilibili.com/video/BV1d44y1f7wP" target="_blank" rel="noopener">B 站公开课</a></p>
+<h3>题目描述</h3>
+<p>给出二叉 搜索 树的根节点，该树的节点值各不相同，请你将其转换为累加树（Greater Sum Tree），使每个节点 node 的新值等于原树中大于或等于 node.val 的值之和。</p>
+<p>把 BST 看成有序数组，例如 [2, 5, 13]，从后向前求累加数组即为 [20, 18, 13]，问题就变简单了。</p>
+<p>累加顺序是右中左，因此需要反中序遍历这个二叉树，然后顺序累加，用一个 pre 变量记录前一个节点的数值。</p>
+<div class="table-wrap"><table><thead><tr><th>示例</th><th>输入</th><th>输出</th></tr></thead><tbody><tr><td>示例 1</td><td>输入：root = [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]</td><td>输出：[30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]</td></tr><tr><td>示例 2</td><td>输入：root = [0,null,1]</td><td>输出：[1,null,1]</td></tr><tr><td>示例 3</td><td>输入：root = [1,0,2]</td><td>输出：[3,3,2]</td></tr><tr><td>示例 4</td><td>输入：root = [3,2,4,1]</td><td>输出：[7,9,4,10]</td></tr></tbody></table></div>
+<p><strong>提示：</strong></p>
+<ul><li>树中的节点数介于 0 和 10^4 之间</li><li>每个节点的值介于 -10^4 和 10^4 之间</li><li>树中的所有值 互不相同</li><li>给定的树为二叉搜索树</li></ul>
+<h3>解题思路</h3>
+<p>反中序遍历（右中左）累加：递归不需要返回值遍历整棵树，单层逻辑为 traversal(cur-&gt;right) 后让 cur-&gt;val += pre（pre 记录前一个节点数值）再更新 pre，最后 traversal(cur-&gt;left)。迭代法即中序模板题用栈模拟，先沿右子树压栈。</p>
+<h3>复杂度分析</h3>
+<p>时间复杂度 O(n)，空间复杂度 O(n)（递归栈，最坏情况）</p>
+<h3>LeetCode 核心代码（C++）</h3>
+<div class="code-block"><div class="code-label">class Solution 核心代码模式</div><pre><code class="language-cpp">class Solution {
+public:
+    int sum = 0;
+    void traversal(TreeNode* node) {
+        if (node == nullptr) return;
+        traversal(node-&gt;right);            // 右
+        sum += node-&gt;val;                  // 中：累加
+        node-&gt;val = sum;                   // 覆盖为累加值
+        traversal(node-&gt;left);             // 左
+    }
+    TreeNode* convertBST(TreeNode* root) {
+        traversal(root);
+        return root;
+    }
+};</code></pre></div>
+
+  <h1>相关题目推荐</h1>
+  <p>文档中提到的延伸练习题：</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>题目</th><th>LeetCode 链接</th></tr></thead>
+    <tbody><tr><td>100. 相同的树</td><td><a href="https://leetcode.cn/problems/same-tree/" target="_blank" rel="noopener">LeetCode 题目页</a></td></tr><tr><td>572. 另一个树的子树</td><td><a href="https://leetcode.cn/problems/subtree-of-another-tree/" target="_blank" rel="noopener">LeetCode 题目页</a></td></tr><tr><td>559. N 叉树的最大深度</td><td><a href="https://leetcode.cn/problems/maximum-depth-of-n-ary-tree/" target="_blank" rel="noopener">LeetCode 题目页</a></td></tr><tr><td>589. N 叉树的前序遍历</td><td><a href="https://leetcode.cn/problems/n-ary-tree-preorder-traversal/" target="_blank" rel="noopener">LeetCode 题目页</a></td></tr><tr><td>590. N 叉树的后序遍历</td><td><a href="https://leetcode.cn/problems/n-ary-tree-postorder-traversal/" target="_blank" rel="noopener">LeetCode 题目页</a></td></tr></tbody>
+  </table></div>
+
+  <h1>总结篇要点</h1>
+  <ul><li>遍历方式：分为深度优先遍历（递归法、迭代法、统一迭代法）和广度优先遍历（层序遍历）。深度优先用栈模拟，广度优先用队列模拟。</li><li>求二叉树的属性（对称、最大/最小深度、节点数、平衡、路径、左叶子、左下角、路径总和等）：求普通二叉树的属性一般用后序，通过递归函数的返回值做计算。</li><li>二叉树的修改与构造（翻转、构造二叉树、最大二叉树、合并二叉树）：涉及到二叉树的构造，无论普通二叉树还是二叉搜索树一定用前序，都是先构造中间节点。</li><li>求二叉搜索树的属性（搜索、验证、最小绝对差、众数、累加树）：一定是中序，要不白瞎了有序性了。</li><li>公共祖先问题：普通二叉树用后序+回溯；二叉搜索树则根据节点数值是否在目标区间判断最近公共祖先。</li><li>遍历顺序总结：构造二叉树用前序；求普通二叉树属性一般用后序；求二叉搜索树属性用中序。</li></ul>
+  <div class="note"><div class="note-title">📖 总结篇全文</div><div><a href="https://programmercarl.com/二叉树总结篇.html" target="_blank" rel="noopener">代码随想录 · 总结篇</a></div></div>
+
+  <div class="footnotes"><strong>说明：</strong>整理日期 2026-08 · 题目描述、示例与提示取自 LeetCode / 代码随想录 · 代码均为 LeetCode 核心代码模式（class Solution）可直接提交 · 视频为《代码随想录》B 站算法公开课。</div>
+</article>
+</div>
+</main>
+</div>
+<div aria-label="图片预览" aria-modal="true" class="image-modal" id="imageModal" role="dialog">
+<button aria-label="关闭" id="modalClose" type="button">×</button>
+<img alt="图片预览" id="modalImage"/>
+</div>
+<script>
+    const mainScroller = document.getElementById('mainScroller');
+    const toc = document.getElementById('toc');
+    const docContent = document.getElementById('docContent');
+    const collapseBtn = document.getElementById('collapseBtn');
+    const themeButtons = [...document.querySelectorAll('.theme-btn')];
+    const hljsTheme = document.getElementById('hljs-theme');
+
+    function slugify(text, index) {
+      const base = text.trim()
+        .toLowerCase()
+        .replace(/[\s]+/g, '-')
+        .replace(/[^\w\u4e00-\u9fff-]/g, '')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+      return base || `section-${index + 1}`;
+    }
+
+    function ensureHeadingIds(headings) {
+      const used = new Set();
+      headings.forEach((h, index) => {
+        let id = h.id || slugify(h.textContent, index);
+        const original = id;
+        let n = 2;
+        while (used.has(id) || (document.getElementById(id) && document.getElementById(id) !== h)) {
+          id = `${original}-${n++}`;
+        }
+        h.id = id;
+        used.add(id);
+      });
+    }
+
+    function createToc() {
+      const headings = [...docContent.querySelectorAll('h1, h2')];
+      ensureHeadingIds(headings);
+      toc.innerHTML = '';
+
+      const root = document.createElement('ul');
+      root.className = 'toc-root';
+      const listStack = [{ level: 0, ul: root }];
+      const liStack = [];
+
+      headings.forEach((heading) => {
+        const level = Number(heading.tagName.slice(1));
+
+        while (listStack.length && listStack[listStack.length - 1].level >= level) {
+          listStack.pop();
+          liStack.pop();
+        }
+
+        let parentUl = listStack[listStack.length - 1]?.ul || root;
+        const parentLi = liStack[liStack.length - 1];
+
+        if (parentLi && level > (listStack[listStack.length - 1]?.level || 0)) {
+          let childUl = parentLi.querySelector(':scope > ul');
+          if (!childUl) {
+            childUl = document.createElement('ul');
+            parentLi.appendChild(childUl);
+            parentLi.classList.add('has-children');
+          }
+          parentUl = childUl;
+        }
+
+        const li = document.createElement('li');
+        const row = document.createElement('div');
+        row.className = 'toc-row';
+
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'toc-toggle';
+        toggle.textContent = '▾';
+        toggle.title = '折叠/展开';
+        toggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (li.classList.contains('has-children')) li.classList.toggle('collapsed');
+        });
+
+        const link = document.createElement('a');
+        link.className = 'toc-link';
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent.trim();
+        link.title = heading.textContent.trim();
+        link.dataset.target = heading.id;
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.replaceState(null, '', `#${heading.id}`);
+        });
+
+        row.append(toggle, link);
+        li.appendChild(row);
+        parentUl.appendChild(li);
+
+        listStack.push({ level, ul: parentUl });
+        liStack.push(li);
+      });
+
+      while (root.firstChild) toc.appendChild(root.firstChild);
+      return headings;
+    }
+
+    function expandParents(link) {
+      let node = link.closest('li');
+      while (node) {
+        node.classList.remove('collapsed');
+        node = node.parentElement?.closest('li');
+      }
+    }
+
+    function activateToc(id) {
+      const links = [...toc.querySelectorAll('.toc-link')];
+      links.forEach(link => link.classList.toggle('active', link.dataset.target === id));
+      const active = links.find(link => link.dataset.target === id);
+      if (active) {
+        expandParents(active);
+        active.scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    function setupObserver(headings) {
+      if (!headings.length) return;
+      const visible = new Map();
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) visible.set(entry.target.id, entry.boundingClientRect.top);
+          else visible.delete(entry.target.id);
+        });
+
+        if (visible.size) {
+          const current = [...visible.entries()].sort((a, b) => Math.abs(a[1]) - Math.abs(b[1]))[0][0];
+          activateToc(current);
+          return;
+        }
+
+        const scrollerTop = mainScroller.getBoundingClientRect().top;
+        let current = headings[0].id;
+        headings.forEach(h => {
+          if (h.getBoundingClientRect().top - scrollerTop <= 120) current = h.id;
+        });
+        activateToc(current);
+      }, {
+        root: mainScroller,
+        rootMargin: '-8% 0px -70% 0px',
+        threshold: [0, 1]
+      });
+      headings.forEach(h => observer.observe(h));
+      activateToc(headings[0].id);
+    }
+
+    function setTheme(theme) {
+      if (!['dark', 'light', 'eye'].includes(theme)) theme = 'dark';
+      document.documentElement.dataset.theme = theme;
+      try { localStorage.setItem('tech-doc-theme', theme); } catch (_) {}
+
+      hljsTheme.href = theme === 'dark'
+        ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css'
+        : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css';
+
+      themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === theme));
+    }
+
+    themeButtons.forEach(btn => btn.addEventListener('click', () => setTheme(btn.dataset.theme)));
+
+    function updateSidebarButton() {
+      const isFixed = !document.body.classList.contains('sidebar-collapsed');
+      const label = isFixed ? '取消固定并收起目录' : '固定目录';
+
+      collapseBtn.title = label;
+      collapseBtn.setAttribute('aria-label', label);
+      collapseBtn.setAttribute('aria-pressed', String(isFixed));
+    }
+
+    collapseBtn.addEventListener('click', () => {
+      document.body.classList.toggle('sidebar-collapsed');
+      updateSidebarButton();
+    });
+
+    const imageModal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalClose = document.getElementById('modalClose');
+    document.querySelectorAll('.figure img').forEach(img => {
+      img.addEventListener('click', () => {
+        modalImage.src = img.src;
+        modalImage.alt = img.alt || '图片预览';
+        imageModal.classList.add('open');
+      });
+    });
+    function closeModal() {
+      imageModal.classList.remove('open');
+      modalImage.removeAttribute('src');
+    }
+    modalClose.addEventListener('click', closeModal);
+    imageModal.addEventListener('click', e => { if (e.target === imageModal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    setTheme(document.documentElement.dataset.theme || 'dark');
+    updateSidebarButton();
+    const headings = createToc();
+    setupObserver(headings);
+    if (window.hljs) hljs.highlightAll();
+    // ===== 目录优化 =====
+    // 分组标题显示题目数（h1 分组后追加 "N 题"）
+    [...toc.querySelectorAll('.toc-link')].forEach(link => {
+      const li = link.closest('li');
+      if (li && li.querySelector(':scope > ul')) {
+        const count = li.querySelectorAll(':scope > ul > li').length;
+        if (count) {
+          const span = document.createElement('span');
+          span.className = 'toc-group-count';
+          span.textContent = count + ' 题';
+          link.appendChild(span);
+        }
+      }
+    });
+    // 目录顶部固定入口：回到顶部
+    const topLink = document.createElement('a');
+    topLink.className = 'toc-link';
+    topLink.textContent = '⬆ 回到顶部';
+    topLink.dataset.fixed = '1';
+    topLink.addEventListener('click', e => {
+      e.preventDefault();
+      mainScroller.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    const topItem = document.createElement('li');
+    topItem.appendChild(topLink);
+    toc.prepend(topItem);
+
+    // 目录搜索过滤：输入关键字实时过滤（自动展开所有分组）
+    const tocSearch = document.getElementById('tocSearch');
+    const tocLinks = [...toc.querySelectorAll('.toc-link')];
+    tocSearch.addEventListener('input', () => {
+      const kw = tocSearch.value.trim().toLowerCase();
+      toc.querySelectorAll('li').forEach(li => li.classList.remove('collapsed'));
+      tocLinks.forEach(link => {
+        if (link.dataset.fixed) return;
+        const li = link.closest('li');
+        li.style.display = (!kw || link.textContent.toLowerCase().includes(kw)) ? '' : 'none';
+      });
+      [...toc.querySelectorAll('li')].forEach(li => {
+        const childUl = li.querySelector(':scope > ul');
+        if (childUl) {
+          const visible = [...childUl.querySelectorAll(':scope > li')]
+            .some(li2 => li2.style.display !== 'none');
+          li.style.display = visible ? '' : 'none';
+        }
+      });
+    });
+
+    // 阅读进度条 + 返回顶部按钮显隐
+    const readProgressBar = document.getElementById('readProgressBar');
+    const backTop = document.getElementById('backTop');
+    mainScroller.addEventListener('scroll', () => {
+      const max = mainScroller.scrollHeight - mainScroller.clientHeight;
+      readProgressBar.style.width = (max > 0 ? (mainScroller.scrollTop / max) * 100 : 0) + '%';
+      backTop.classList.toggle('show', mainScroller.scrollTop > 400);
+    }, { passive: true });
+    backTop.addEventListener('click', () => mainScroller.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
+<button aria-label="返回顶部" class="back-top" id="backTop" title="返回顶部" type="button">↑</button>
+</body>
+</html>
