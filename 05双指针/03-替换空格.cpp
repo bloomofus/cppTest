@@ -16,7 +16,7 @@ auto solution=[](string& s)->string{
             ++numCount;
         }
     }
-    string newStr(s.size()+5*numCount,' '); // 这里对输入s直接resize也可以，流程一致
+    string newStr(s.size()+5*numCount,' ');
     int sIdx=s.size()-1;
     int newStrIdx=newStr.size()-1;
     for(;sIdx>=0;--sIdx)
