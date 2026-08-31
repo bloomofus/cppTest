@@ -21,7 +21,7 @@ C++ data-structures & algorithms practice repo following 《代码随想录》(p
 
 ## Comment conventions
 - Comments are in **Chinese**, matching the repo's 《代码随想录》 style.
-- Use a `// -- 思路:` (or `// -- 思路N:`) header block at the top of a solution function to explain the approach, then follow with plain-language reasoning. See `05双指针/05-反转链表.cpp` and `05双指针/08-环形链表.cpp` for examples.
+- Use a `// -- 思路:` (or `// -- 思路N:`) header block at the top of a solution function (inside the function body, NOT outside the class or function signature) to explain the approach, then follow with plain-language reasoning. See `05双指针/05-反转链表.cpp` and `05双指针/08-环形链表.cpp` for examples.
 - Prefer concrete walk-through examples over abstract description (e.g. "原来是12345，处理一次变成21345…"). When a proof is involved (e.g. Floyd 判圈), spell out the variable setup (a/b/c distances) and the derived equation.
 - Keep short inline comments on non-obvious lines (e.g. why a pointer is reset, what a null check means), as in the existing topic files.
 - Do NOT add code comments unless the user asks; the style above is the established convention when they do.
